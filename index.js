@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 import { connect } from "react-redux";
-import { Router, Switch, Route, Redirect } from "react-router";
+import { Redirect, Route, Router, Switch } from "react-router";
 import { AppHistory } from "../../history/History";
 import { withRouter } from "react-router-dom";
 
@@ -19,464 +19,19 @@ import { GeneralService } from "../../api-services/services/GeneralService";
 
 import config from "../../config/config";
 
-// import NameVerification from "./Card/NameVerification";
-// import PassSetting from "./Card/PassSetting";
-
 import ErrorSwitcher from "../../utils/ErrorSwitcher";
 
-// import CustomerService from "./CustomerService/index";
-
-import { withStyles } from "@material-ui/core/styles";
-import Modal from "@material-ui/core/Dialog";
-import styled from "styled-components";
 import i18n from "../../utils/i18n";
 import BlowFishEncryption from "../../utils/BlowFishEncryption";
 import Common from "../../utils/Common";
 import PopupAnnouncement from "../Share/PopupAnnouncement";
-import Login from "./components/Login/index";
-import Main from "./components/Main/index";
-import Profile from "./components/Profile/index";
-import NameVerify from "./components/Profile/id-verification";
-import WeChat from "./components/Profile/WeChat";
-import QQ from "./components/Profile/QQ";
-import FacebookMessenger from "./components/Profile/FacebookMessenger";
-import Telegram from "./components/Profile/Telegram";
-import Line from "./components/Profile/Line";
-import Viber from "./components/Profile/Viber";
-import Whatsapp from "./components/Profile/Whatsapp";
-import Email from "./components/Profile/Email";
-import ChangeEmail from "./components/Profile/ChangeEmail";
-import ChangePhone from "./components/Profile/ChangePhone";
-import Phone from "./components/Profile/Phone";
-import ChangePassword from "./components/Profile/ChangePassword";
-import WithdrawalPassword from "./components/Profile/WithdrawalPassword";
-import ChangeWithdrawalPassword from "./components/Profile/ChangeWithdrawalPassword";
-import ResetWithdrawalPassword from "./components/Profile/ResetWithdrawalPassword";
-import Slot from "./components/Slot";
-import Promotion from "./components/Promotion/index";
-import PromotionDetails from "./components/Promotion/Details";
-
-import Inbox from "./components/Inbox/index";
-import InboxDetails from "./components/Inbox/Details";
-import Transfer from "./components/Transfer/index";
-import Withdrawal from "./components/Withdrawal/index";
-
-import WithdrawalDetails from "./components/Withdrawal/Details";
-import Deposit from "./components/Deposit/index";
-import DepositPayment from "./components/Deposit/Payment";
-import DepositDetails from "./components/Deposit/Details";
-import DepositManual from "./components/Deposit/Manual";
-import Card from "./components/Card/index";
-import AddCard from "./components/Card/AddCard";
-import Report from "./components/Report/index";
-import ForgotPassword from "./components/ForgotPassword/index";
-import SettingLanguage from "./utils/Language";
-import CustomerServiceChat from "./components/CustomerService/index";
-import Maintenance from "./components/Maintenance";
-import VIP from "./components/VIP";
-import Banned from "./components/Banned";
 import Loading from "./components/Share/Loading";
-import Affiliate from "./components/Affiliate";
-import Birthdate from "./components/Profile/Birthdate";
-import CustomSportPage from "./components/CustomSportPage";
 import ForcedVerification from "./components/ForcedVerification";
 import LiveChat from "../Share/live-chat";
-import memo from "./components/memo";
+import { routes } from "./router";
+import PopupModal from "./components/PopupModal";
+import PopupAlertModal from "./components/PopupAlertModal";
 
-const StyledModal = withStyles((theme) => ({
-  paper: {
-    borderRadius: "50px",
-    fontSize: "28px",
-    color: "#666666",
-    padding: "30px",
-    width: "500px",
-    maxWidth: "690px",
-
-    display: "block",
-  },
-}))(Modal);
-const StyledModalPopup = withStyles((theme) => ({
-  paper: {
-    borderRadius: "50px",
-    fontSize: "28px",
-    color: "#666666",
-    padding: "30px",
-    width: "600px",
-    maxWidth: "690px",
-
-    display: "block",
-  },
-}))(Modal);
-const DialoTitle = styled.div`
-  font-size: 36px;
-  font-weight: 600;
-  margin: 30px 0 20px 45px;
-  color: #4a4a4a;
-`;
-const DialogMessage = styled.div`
-  font-size: 26px;
-  margin: 20px 45px;
-  color: #4a4a4a;
-  line-height: 1.8em;
-  text-align: center;
-`;
-const ButtonConfirm = styled.div`
-  width: 250px;
-  height: 90px;
-  border-radius: 20px;
-
-  font-size: 34px;
-
-  text-align: center;
-
-  padding-top: 24px;
-
-  margin: 10px auto;
-  background-image: linear-gradient(
-    to top,
-    ${({ theme }) => theme.primaryGradient},
-    ${({ theme }) => theme.primary}
-  );
-  color: #ffffff;
-`;
-const ButtonCancel = styled(ButtonConfirm)``;
-const RouteMapping = [
-  {
-    path: "/",
-    component: Main,
-    alert: true,
-    popup: true,
-    navigate: true,
-  },
-  {
-    path: "/main",
-    component: Main,
-    alert: true,
-    popup: true,
-    navigate: true,
-  },
-  {
-    path: "/main/:page",
-    component: Main,
-    alert: true,
-    popup: true,
-    navigate: true,
-  },
-  {
-    path: "/login",
-    component: Login,
-    alert: true,
-  },
-  {
-    path: "/a/:promotionid",
-    component: Login,
-    alert: true,
-  },
-  {
-    path: "/t/:promotionid",
-    component: Login,
-    alert: true,
-  },
-  {
-    path: "/f/:promotionid",
-    component: Login,
-    alert: true,
-  },
-  {
-    path: "/p/:playername",
-    component: Login,
-    alert: true,
-  },
-  {
-    path: "/register&visitor_id=:subid",
-    component: Login,
-    alert: true,
-  },
-  {
-    path: "/profile",
-    component: Profile,
-    alert: true,
-  },
-  {
-    path: "/profile/name",
-    component: NameVerify,
-    alert: true,
-  },
-  {
-    path: "/profile/wechat",
-    component: WeChat,
-    alert: true,
-  },
-  {
-    path: "/profile/birthdate",
-    component: Birthdate,
-    alert: true,
-  },
-  {
-    path: "/profile/qq",
-    component: QQ,
-    alert: true,
-  },
-  {
-    path: "/profile/fb",
-    component: FacebookMessenger,
-    alert: true,
-  },
-  {
-    path: "/profile/telegram",
-    component: Telegram,
-    alert: true,
-  },
-  {
-    path: "/profile/line",
-    component: Line,
-    alert: true,
-  },
-  {
-    path: "/profile/viber",
-    component: Viber,
-    alert: true,
-  },
-  {
-    path: "/profile/whatsapp",
-    component: Whatsapp,
-    alert: true,
-  },
-  {
-    path: "/profile/email",
-    component: Email,
-    alert: true,
-  },
-  {
-    path: "/profile/changeemail",
-    component: ChangeEmail,
-    alert: true,
-  },
-  {
-    path: "/profile/changephone",
-    component: ChangePhone,
-    alert: true,
-  },
-  {
-    path: "/profile/phone",
-    component: Phone,
-    alert: true,
-  },
-  {
-    path: "/profile/changepassword",
-    component: ChangePassword,
-    alert: true,
-  },
-  {
-    path: "/profile/withdrawalpassword",
-    component: WithdrawalPassword,
-    alert: true,
-  },
-  {
-    path: "/profile/resetwithdrawalpassword",
-    component: ResetWithdrawalPassword,
-    alert: true,
-  },
-  {
-    path: "/profile/changewithdrawalpassword",
-    component: ChangeWithdrawalPassword,
-    alert: true,
-  },
-
-  {
-    path: "/slots/:platform?/:type?",
-    component: Slot,
-    alert: true,
-    navigate: true,
-  },
-  {
-    path: "/promotion-list",
-    component: Promotion,
-    alert: true,
-    navigate: true,
-  },
-  {
-    path: "/promotion/:id?",
-    component: PromotionDetails,
-    alert: true,
-    navigate: true,
-    promoProps: true,
-  },
-
-  {
-    path: "/inbox",
-    component: Inbox,
-    alert: true,
-    navigate: true,
-  },
-  {
-    path: "/memo",
-    component: memo,
-    alert: true,
-    navigate: true,
-  },
-  {
-    path: "/inbox/details/:id",
-    component: InboxDetails,
-    alert: true,
-    navigate: true,
-    screenHeight: true,
-  },
-  !config.features.NewTransferUI && {
-    path: "/transfer",
-    component: Transfer,
-    alert: true,
-    navigate: true,
-  },
-  {
-    path: "/withdrawal",
-    component: Withdrawal,
-    alert: true,
-    navigate: true,
-  },
-  {
-    path: "/withdrawal/details",
-    component: WithdrawalDetails,
-    alert: true,
-    navigate: true,
-  },
-
-  {
-    path: "/deposit/:promotionid?",
-    component: Deposit,
-    alert: true,
-    navigate: true,
-  },
-  {
-    path: "/manual/:paymentId?",
-    component: Deposit,
-    alert: true,
-    navigate: true,
-  },
-  {
-    path: "/deposit/payment/:id/:bank/:amount/:bonus?",
-    component: DepositPayment,
-    alert: true,
-    navigate: true,
-  },
-  {
-    path: "/deposit/details",
-    component: DepositDetails,
-    alert: true,
-  },
-  {
-    path: "/deposit/manual",
-    component: DepositManual,
-    alert: true,
-  },
-  {
-    path: "/card",
-    component: Card,
-    alert: true,
-    navigate: true,
-  },
-  {
-    path: "/card/add",
-    component: AddCard,
-    alert: true,
-    navigate: true,
-  },
-  {
-    path: "/maintenance",
-    component: Maintenance,
-    navigate: true,
-    alert: true,
-    GetSupportUrl: true,
-    brandComm: true,
-  },
-  // {
-  //   path: "/card/name",
-  //   component: NameVerification,
-  //   alert: true,
-  //   navigate: true,
-  // },
-  // {
-  //   path: "/card/pass",
-  //   component: PassSetting,
-  //   alert: true,
-  //   navigate: true,
-  // },
-
-  {
-    path: "/report/:tab?",
-    component: Report,
-    alert: true,
-    navigate: true,
-  },
-  // {
-  //   path: "/customer-service",
-  //   component: CustomerService,
-  //   alert: true,
-  //   navigate: true,
-  //   popup: true,
-  // },
-  {
-    path: "/chat/:userid?/:name?/:question?",
-    component: CustomerServiceChat,
-  },
-  {
-    path: "/forgot-password",
-    component: ForgotPassword,
-    alert: true,
-  },
-  // {
-  //   path: "/forgot-password/option",
-  //   component: ForgotPasswordStep2,
-  //   alert: true,
-  // },
-  // {
-  //   path: "/forgot-password/reset",
-  //   component: ForgotPasswordReset,
-  //   alert: true,
-  // },
-
-  {
-    path: "/affiliate",
-    component: Affiliate,
-    navigate: true,
-  },
-  //{
-  //  path: "/affiliate/member",
-  //  component: AffiliateMember,
-  //  screenHeight: true,
-  //},
-  //{
-  //  path: "/affiliate/report",
-  //  component: AffiliateReport,
-  //  screenHeight: true,
-  //},
-  //{
-  //  path: "/affiliate/guide",
-  //  component: AffiliateGuide,
-  //  screenHeight: true,
-  //},
-  {
-    path: "/setting/language",
-    component: SettingLanguage,
-    screenHeight: true,
-  },
-  {
-    path: "/banned",
-    component: Banned,
-    navigate: true,
-  },
-  {
-    path: "/vip",
-    component: VIP,
-    navigate: true,
-  },
-  {
-    path: "/sports/:platform",
-    component: CustomSportPage,
-    alert: true,
-    navigate: true,
-  },
-];
 class Wap extends Component {
   constructor(props) {
     super(props);
@@ -484,15 +39,17 @@ class Wap extends Component {
     this.state = {
       showCS: false,
       isIpRestrict: false,
+      loading: true,
+      // PopupAlert
       open: false,
-      openPopup: false,
-      popupUrl: "",
       title: "",
       message: "",
-      loading: true,
+      action: "",
+      // Popup
+      openPopup: false,
+      popupUrl: "",
       openAnnouncement: false,
       showPromotion: false,
-      action: "",
     };
   }
 
@@ -504,21 +61,20 @@ class Wap extends Component {
       window.LiveChatWidget.call("maximize");
       return;
     }
-    var newURL = this.props.general.livechat
+    const newURL = this.props.general.livechat
       ? this.props.general.livechat.setting.url
           .replace("{name}", name)
           .replace("{lang}", i18n.language)
           .replace("{email}", email || "")
       : "";
 
-    if (newURL.length) {
-      window.open(newURL, "_blank");
-    } else {
-    }
+    if (!newURL.length) return;
+    window.open(newURL, "_blank");
   };
+
   updateScreenSize = () => {
-    var w = window.screen.width;
-    var h = Math.max(
+    const w = window.screen.width;
+    const h = Math.max(
       document.documentElement.clientHeight,
       window.innerHeight || 0
     );
@@ -527,6 +83,7 @@ class Wap extends Component {
 
     this.props.updateScreenSize(w, h, scale);
   };
+
   async componentDidMount() {
     Common.loadScript("/js/config.js", () => {
       Common.loadScript("/js/iovation.js", () => {});
@@ -631,10 +188,11 @@ class Wap extends Component {
         //   .getElementById("ioBB")
         //   .parentNode.removeChild(document.getElementById("ioBB"));
         // this.props.checkGame();
-        var bankInfoAuthentication = null;
-        var isPhoneNull = null;
-        var isEmailNull = null;
-        var isRegisterCompleted = null;
+        let bankInfoAuthentication = null;
+        let isPhoneNull = null;
+        let isEmailNull = null;
+        let isRegisterCompleted = null;
+
         await this.props.getAccountProfile(true).then((response) => {
           bankInfoAuthentication = response.data.bankinfoauthentication;
           isPhoneNull = response.data.phone === null;
@@ -707,13 +265,15 @@ class Wap extends Component {
   componentWillUnmount() {
     window.removeEventListener("focus", this.onFocus);
   }
+
   onFocus = () => {
     if (this.props.account.token !== null) {
       this.props.getBalanceList();
     }
   };
+
   componentDidUpdate(preProps) {
-    var isInHomePage =
+    const isInHomePage =
       this.props.ui.mains &&
       this.props.ui.mains !== preProps.ui.mains &&
       this.props.ui.mains.length > 0;
@@ -792,17 +352,7 @@ class Wap extends Component {
           this.props.getGameBalance(a.abbreviation);
         });
     }
-    // will cause blacklist issue on when registering ref:TGS-823
-    // if (
-    //   preProps.account.token !== this.props.account.token &&
-    //   this.props.account.token !== null
-    // ) {
-    //   this.props.game.providerList
-    //     .filter((item) => item.status === 0 && item.transferwallet === true)
-    //     .map((a) => {
-    //       this.props.getGameBalance(a.abbreviation);
-    //     });
-    // }
+
     if (
       preProps.general.isMaintenance !== this.props.general.isMaintenance &&
       this.props.general.isMaintenance === true
@@ -859,6 +409,7 @@ class Wap extends Component {
       }
     }
   }
+
   handleNavigate = (page) => {
     if (
       page.indexOf("/promotion") > -1 ||
@@ -877,36 +428,42 @@ class Wap extends Component {
 
     AppHistory.push(page);
   };
-  handleAlert = (title, message, action) => {
-    this.setState({
-      ...this.state,
-      title: title,
-      message: message,
-      open: true,
-      action: action,
+
+  // PopupAlert
+  handleOpenPopupAlert = (title, message, action) => {
+    this.setState((prevState) => {
+      return {
+        ...prevState,
+        title: title,
+        message: message,
+        open: true,
+        action: action,
+      };
     });
   };
-  handlePopup = (url) => {
+
+  handleClosePopupAlert = () => {
+    this.setState({ ...this.state, open: false });
+  };
+
+  // Popup
+  handleOpenPopup = (url) => {
     this.setState({
       ...this.state,
       popupUrl: url,
       openPopup: true,
     });
   };
-  handleOpenPopupUrl = () => {
-    this.setState({
-      ...this.state,
-
-      openPopup: false,
-    });
-    window.open(this.state.popupUrl, "_blank");
-  };
   handleClosePopup = () => {
     this.setState({
       ...this.state,
-
       openPopup: false,
     });
+  };
+
+  handleClickUrl = () => {
+    this.handleClosePopup();
+    window.open(this.state.popupUrl, "_blank");
   };
 
   render() {
@@ -966,18 +523,18 @@ class Wap extends Component {
         <>
           <Router history={AppHistory}>
             <Switch>
-              {RouteMapping.map((row, index) => {
+              {routes.map((route, index) => {
                 let propsObj = {};
-                if (row.alert === true) {
-                  propsObj["alert"] = this.handleAlert;
+                if (route.alert === true) {
+                  propsObj["alert"] = this.handleOpenPopupAlert;
                 }
-                if (row.navigate === true) {
+                if (route.navigate === true) {
                   propsObj["navigate"] = this.handleNavigate;
                 }
-                if (row.popup === true) {
-                  propsObj["popup"] = this.handlePopup;
+                if (route.popup === true) {
+                  propsObj["popup"] = this.handleOpenPopup;
                 }
-                if (row.screenHeight === true) {
+                if (route.screenHeight === true) {
                   propsObj["screenHeight"] = this.props.screenHeight;
                 }
                 propsObj["GetSupportUrl"] = this.GetSupportUrl;
@@ -987,61 +544,61 @@ class Wap extends Component {
                   <Route
                     exact
                     key={index}
-                    path={row.path}
+                    path={route.path}
                     render={(props) => {
-                      if (row.path === "/deposit/manual") {
+                      if (route.path === "/deposit/manual") {
                         propsObj["order"] = props.location.state;
                       }
-                      if (row.path === "/ip-restrict-mobile") {
+                      if (route.path === "/ip-restrict-mobile") {
                         propsObj["ip"] =
                           props.location.state != null
                             ? props.location.state.ip
                             : null;
                       }
-                      if (row.path === "/promotion/:activityId?") {
+                      if (route.path === "/promotion/:activityId?") {
                         propsObj["promo"] =
                           props.location.state != null
                             ? props.location.state.promo
                             : null;
                       }
-                      if (row.path === "/deposit/details") {
+                      if (route.path === "/deposit/details") {
                         propsObj["order"] = props.location.state;
                       }
-                      if (row.path === "/withdrawal/details") {
+                      if (route.path === "/withdrawal/details") {
                         propsObj["order"] =
                           props.location.state != null
                             ? props.location.state.order
                             : null;
                       }
-                      if (row.path === "/chat/:userid?/:name?/:question?") {
+                      if (route.path === "/chat/:userid?/:name?/:question?") {
                         propsObj["login"] =
                           props.location.state != null
                             ? props.location.state.login
                             : null;
                       }
-                      if (row.path === "/forgot-password/option") {
+                      if (route.path === "/forgot-password/option") {
                         propsObj["details"] =
                           props.location.state != null
                             ? props.location.state.details
                             : null;
                       }
-                      if (row.path === "/forgot-password/reset") {
+                      if (route.path === "/forgot-password/reset") {
                         propsObj["forget_token"] =
                           props.location.state != null
                             ? props.location.state.forget_token
                             : null;
                       }
-                      if (row.path === "/card/name") {
+                      if (route.path === "/card/name") {
                         propsObj["from"] =
                           props.location.state != null
                             ? props.location.state.from
                             : null;
                       }
                       return (
-                        <row.component
+                        <route.component
                           {...propsObj}
                           {...this.props.general}
-                        ></row.component>
+                        ></route.component>
                       );
                     }}
                   />
@@ -1051,14 +608,14 @@ class Wap extends Component {
             </Switch>
           </Router>
           {(() => {
-            const matchingpath =
+            const matchingPath =
               this.props.location.pathname === "/" ||
               this.props.location.pathname === "/main/home";
             if (
               config.features.PopupAnnouncement &&
               this.props.ui.mains &&
               this.props.ui.mains.length > 0 &&
-              matchingpath
+              matchingPath
             ) {
               var row = this.props.ui.mains[0];
 
@@ -1127,63 +684,23 @@ class Wap extends Component {
               <>
                 <ForcedVerification
                   forcedverify={true}
-                  alert={this.handleAlert}
+                  alert={this.handleOpenPopupAlert}
                 />
               </>
             )}
 
-          <StyledModal onClose={this.handleClose} open={this.state.open}>
-            <DialoTitle>{this.state.title}</DialoTitle>
-            <DialogMessage>{this.state.message}</DialogMessage>
-            {(() => {
-              if (this.state.message === "无法连接，请检查您的网络") {
-                return (
-                  <ButtonConfirm onClick={() => window.location.reload()}>
-                    {i18n.t("common.reload")}
-                  </ButtonConfirm>
-                );
-              } else {
-                return (
-                  <div>
-                    <ButtonConfirm
-                      onClick={() =>
-                        this.setState({ ...this.state, open: false })
-                      }
-                    >
-                      {i18n.t("common.confirm")}
-                    </ButtonConfirm>
-                    {this.state.action && (
-                      <div
-                        onClick={() =>
-                          this.setState({ ...this.state, open: false })
-                        }
-                      >
-                        {this.state.action}
-                      </div>
-                    )}
-                  </div>
-                );
-              }
-            })()}
-          </StyledModal>
-          <StyledModalPopup
-            onClose={this.handleClosePopup}
-            open={this.state.openPopup}
-          >
-            <DialogMessage>{i18n.t("common.msgPopupBlocker")}</DialogMessage>
-            <ButtonCancel
-              onClick={this.handleOpenPopupUrl}
-              style={{ float: "left" }}
-            >
-              {i18n.t("common.confirm")}
-            </ButtonCancel>
-            <ButtonCancel
-              onClick={this.handleClosePopup}
-              style={{ float: "right" }}
-            >
-              {i18n.t("common.cancel")}
-            </ButtonCancel>
-          </StyledModalPopup>
+          <PopupAlertModal
+            isOpen={this.state.open}
+            handleClose={this.handleClosePopupAlert}
+            title={this.state.title}
+            message={this.state.message}
+            action={this.state.action}
+          />
+          <PopupModal
+            isOpen={this.state.openPopup}
+            handleClose={this.handleClosePopup}
+            handleClickUrl={this.handleClickUrl}
+          />
         </>
       );
     }
