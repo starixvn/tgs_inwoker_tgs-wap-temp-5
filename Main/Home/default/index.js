@@ -1130,7 +1130,7 @@ class Default extends Component {
                 })
                 .map((row, index) => {
                   var jsx = (
-                    <NewWrapper maintenance={row.status != 0}>
+                    <NewWrapper key={index} maintenance={row.status != 0}>
                       <Maintenance>
                         {i18n.t("transfer.maintenance")}
                       </Maintenance>
