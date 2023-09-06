@@ -33,55 +33,55 @@ import i18n from "../../utils/i18n";
 import BlowFishEncryption from "../../utils/BlowFishEncryption";
 import Common from "../../utils/Common";
 import PopupAnnouncement from "../Share/PopupAnnouncement";
-import Login from "./Login/index";
-import Main from "./Main/index";
-import Profile from "./Profile/index";
-import NameVerify from "./Profile/id-verification";
-import WeChat from "./Profile/WeChat";
-import QQ from "./Profile/QQ";
-import FacebookMessenger from "./Profile/FacebookMessenger";
-import Telegram from "./Profile/Telegram";
-import Line from "./Profile/Line";
-import Viber from "./Profile/Viber";
-import Whatsapp from "./Profile/Whatsapp";
-import Email from "./Profile/Email";
-import ChangeEmail from "./Profile/ChangeEmail";
-import ChangePhone from "./Profile/ChangePhone";
-import Phone from "./Profile/Phone";
-import ChangePassword from "./Profile/ChangePassword";
-import WithdrawalPassword from "./Profile/WithdrawalPassword";
-import ChangeWithdrawalPassword from "./Profile/ChangeWithdrawalPassword";
-import ResetWithdrawalPassword from "./Profile/ResetWithdrawalPassword";
-import Slot from "./Slot";
-import Promotion from "./Promotion/index";
-import PromotionDetails from "./Promotion/Details";
+import Login from "./components/Login/index";
+import Main from "./components/Main/index";
+import Profile from "./components/Profile/index";
+import NameVerify from "./components/Profile/id-verification";
+import WeChat from "./components/Profile/WeChat";
+import QQ from "./components/Profile/QQ";
+import FacebookMessenger from "./components/Profile/FacebookMessenger";
+import Telegram from "./components/Profile/Telegram";
+import Line from "./components/Profile/Line";
+import Viber from "./components/Profile/Viber";
+import Whatsapp from "./components/Profile/Whatsapp";
+import Email from "./components/Profile/Email";
+import ChangeEmail from "./components/Profile/ChangeEmail";
+import ChangePhone from "./components/Profile/ChangePhone";
+import Phone from "./components/Profile/Phone";
+import ChangePassword from "./components/Profile/ChangePassword";
+import WithdrawalPassword from "./components/Profile/WithdrawalPassword";
+import ChangeWithdrawalPassword from "./components/Profile/ChangeWithdrawalPassword";
+import ResetWithdrawalPassword from "./components/Profile/ResetWithdrawalPassword";
+import Slot from "./components/Slot";
+import Promotion from "./components/Promotion/index";
+import PromotionDetails from "./components/Promotion/Details";
 
-import Inbox from "./Inbox/index";
-import InboxDetails from "./Inbox/Details";
-import Transfer from "./Transfer/index";
-import Withdrawal from "./Withdrawal/index";
+import Inbox from "./components/Inbox/index";
+import InboxDetails from "./components/Inbox/Details";
+import Transfer from "./components/Transfer/index";
+import Withdrawal from "./components/Withdrawal/index";
 
-import WithdrawalDetails from "./Withdrawal/Details";
-import Deposit from "./Deposit/index";
-import DepositPayment from "./Deposit/Payment";
-import DepositDetails from "./Deposit/Details";
-import DepositManual from "./Deposit/Manual";
-import Card from "./Card/index";
-import AddCard from "./Card/AddCard";
-import Report from "./Report/index";
-import ForgotPassword from "./ForgotPassword/index";
-import SettingLanguage from "./Setting/Language";
-import CustomerServiceChat from "./CustomerService/index";
-import Maintenance from "./Maintenance";
-import VIP from "./VIP";
-import Banned from "./Banned";
-import Loading from "./Share/Loading";
-import Affiliate from "./Affiliate";
-import Birthdate from "./Profile/Birthdate";
-import CustomSportPage from "./CustomSportPage";
-import ForcedVerification from "./ForcedVerification";
+import WithdrawalDetails from "./components/Withdrawal/Details";
+import Deposit from "./components/Deposit/index";
+import DepositPayment from "./components/Deposit/Payment";
+import DepositDetails from "./components/Deposit/Details";
+import DepositManual from "./components/Deposit/Manual";
+import Card from "./components/Card/index";
+import AddCard from "./components/Card/AddCard";
+import Report from "./components/Report/index";
+import ForgotPassword from "./components/ForgotPassword/index";
+import SettingLanguage from "./utils/Language";
+import CustomerServiceChat from "./components/CustomerService/index";
+import Maintenance from "./components/Maintenance";
+import VIP from "./components/VIP";
+import Banned from "./components/Banned";
+import Loading from "./components/Share/Loading";
+import Affiliate from "./components/Affiliate";
+import Birthdate from "./components/Profile/Birthdate";
+import CustomSportPage from "./components/CustomSportPage";
+import ForcedVerification from "./components/ForcedVerification";
 import LiveChat from "../Share/live-chat";
-import memo from "./memo";
+import memo from "./components/memo";
 
 const StyledModal = withStyles((theme) => ({
   paper: {
@@ -113,7 +113,7 @@ const DialoTitle = styled.div`
   margin: 30px 0 20px 45px;
   color: #4a4a4a;
 `;
-const DialoMessage = styled.div`
+const DialogMessage = styled.div`
   font-size: 26px;
   margin: 20px 45px;
   color: #4a4a4a;
@@ -1134,7 +1134,7 @@ class Wap extends Component {
 
           <StyledModal onClose={this.handleClose} open={this.state.open}>
             <DialoTitle>{this.state.title}</DialoTitle>
-            <DialoMessage>{this.state.message}</DialoMessage>
+            <DialogMessage>{this.state.message}</DialogMessage>
             {(() => {
               if (this.state.message === "无法连接，请检查您的网络") {
                 return (
@@ -1170,7 +1170,7 @@ class Wap extends Component {
             onClose={this.handleClosePopup}
             open={this.state.openPopup}
           >
-            <DialoMessage>{i18n.t("common.msgPopupBlocker")}</DialoMessage>
+            <DialogMessage>{i18n.t("common.msgPopupBlocker")}</DialogMessage>
             <ButtonCancel
               onClick={this.handleOpenPopupUrl}
               style={{ float: "left" }}
