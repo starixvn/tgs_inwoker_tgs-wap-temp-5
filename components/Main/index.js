@@ -16,6 +16,7 @@ import i18n from "../../../../utils/i18n";
 import Support from "./Support";
 import Download from "../Download";
 import config from "../../../../config/config";
+import BottomAppBar from "@/components/Wap/components/BottomAppBar";
 
 const StyledBottomAppBar = withStyles({
   root: {
@@ -192,13 +193,12 @@ class Main extends Component {
       //    );
       //  }
       // } else
-      {
-        this.setState({
-          ...this.state,
-          currentPage: value,
-        });
-        this.props.appHistory.push(value);
-      }
+
+      this.setState({
+        ...this.state,
+        currentPage: value,
+      });
+      this.props.appHistory.push(value);
     }
   };
   toggleMenu = () => {
@@ -394,74 +394,11 @@ class Main extends Component {
             <ButtonCloseMenu onClick={this.handleCloseMenu}></ButtonCloseMenu>
           </MenuContainer>
         </StyledDialog>
-        <StyledBottomAppBar position="fixed" color="default">
-          <CustomBottomNavigation
-            value={this.state.currentPage}
-            showLabels
-            style={{ width: "750px", height: "90px" }}
-          >
-            <CustomBottomNavigationAction
-              label={i18n.t("wap.main.homePage")}
-              value="/main/home"
-              onClick={() => this.handleChangeSelection("/main/home")}
-              icon={
-                <BottomNavigatorFrame
-                  src={
-                    process.env.PUBLIC_URL + `/assets/images/wapp/icon-home.png`
-                  }
-                />
-              }
-            />
-            <CustomBottomNavigationAction
-              label={i18n.t("wap.main.promo")}
-              value="/promotion-list"
-              onClick={() => this.handleChangeSelection("/promotion-list")}
-              icon={
-                <BottomNavigatorFrame
-                  src={
-                    process.env.PUBLIC_URL +
-                    `/assets/images/wapp/icon-promotion.png`
-                  }
-                />
-              }
-            />
-            <CustomBottomNavigationAction
-              onClick={this.toggleMenu}
-              label=""
-              icon={
-                <BottomNavigatorPlus
-                  selected={this.props.currentPage === "/"}
-                />
-              }
-            />
-
-            <CustomBottomNavigationAction
-              onClick={() => this.handleChangeSelection("/main/support")}
-              value="/customer-service"
-              label={i18n.t("wap.main.cs")}
-              icon={
-                <BottomNavigatorFrame
-                  src={
-                    process.env.PUBLIC_URL + `/assets/images/wapp/icon-cs.png`
-                  }
-                />
-              }
-            />
-            <CustomBottomNavigationAction
-              label={i18n.t("wap.main.my")}
-              value="/main/profile"
-              onClick={() => this.handleChangeSelection("/main/profile")}
-              icon={
-                <BottomNavigatorFrame
-                  src={
-                    process.env.PUBLIC_URL +
-                    `/assets/images/wapp/icon-profile.png`
-                  }
-                />
-              }
-            />
-          </CustomBottomNavigation>
-        </StyledBottomAppBar>
+        <BottomAppBar
+          currentPage={this.state.currentPage}
+          handleChangeSelection={this.handleChangeSelection}
+          toggleMenu={this.toggleMenu}
+        />
       </React.Fragment>
     );
   }

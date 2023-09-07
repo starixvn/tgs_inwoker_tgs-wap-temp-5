@@ -8,20 +8,20 @@ import Slider from "../Slider";
 
 import { withRouter } from "react-router-dom";
 
-import { GameTypeEnum } from "../../../../../../api-services/utils/Enum";
+import { GameTypeEnum } from "@/api-services/utils/Enum";
 
-import Common from "../../../../../../utils/Common";
+import Common from "@/utils/Common";
 
-import i18n from "../../../../../../utils/i18n";
+import i18n from "@/utils/i18n";
 import Marquee from "../Marquee";
-import config from "../../../../../../config/config";
+import config from "@/config/config";
 
-import CustomPopover from "../../../../../Share/custompopover";
-import { SortedMenuList } from "../../../../../../utils/HeaderSorting";
+import CustomPopover from "@/components/Share/custompopover";
+import { SortedMenuList } from "@/utils/HeaderSorting";
 import { Textfit } from "react-textfit";
 import PromotionRoulette from "../PromotionRoulette";
-import OnlineUserDisplayer from "../../../../../Share/online-user-displayer";
-import { GameService } from "../../../../../../api-services/services/GameService";
+import OnlineUserDisplayer from "@/components/Share/online-user-displayer";
+import { GameService } from "@/api-services/services/GameService";
 const StyledAppBar = withStyles({
   root: {
     height: "650px",
@@ -940,7 +940,7 @@ class Default extends Component {
                               </div>
                               {SortedMenuList.map((item, key) => {
                                 return (
-                                  <GameType>
+                                  <GameType key={key}>
                                     <GameTypeName>
                                       {i18n.t(item.title)}
                                     </GameTypeName>
@@ -1218,14 +1218,13 @@ class Default extends Component {
                 .map((roulette, index) => {
                   return roulette.roulettecount > 0 && index === 0 ? (
                     <PromotionRoulette
+                      key={index}
                       rouletteType={roulette.promotiontype.toUpperCase()}
                       promotionDetail={{
                         id: roulette.promotionid,
                       }}
                     ></PromotionRoulette>
-                  ) : (
-                    <React.Fragment></React.Fragment>
-                  );
+                  ) : null;
                 })}
             {!config.features.RouletteNewFlow && this.isRouletteAvailable() && (
               <PromotionRoulette
