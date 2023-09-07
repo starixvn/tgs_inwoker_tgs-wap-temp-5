@@ -815,9 +815,11 @@ class Default extends Component {
       Object.values(this.props.game.providerList).filter(
         (item) => item.transferwallet === true
       ).length > 0;
+
     return (
       <React.Fragment>
         <StyledAppBar position="fixed" color="default">
+          {/* Header */}
           <LogoHolderAppBar>
             <LogoHolder
               img={
@@ -826,7 +828,11 @@ class Default extends Component {
               }
             />
           </LogoHolderAppBar>
-          <Slider></Slider>
+
+          {/* Carousel */}
+          <Slider />
+
+          {/* User Info Block */}
           <FixedContainer>
             <AnnouncementContainer>
               <AnnouncementTitle>
@@ -836,6 +842,7 @@ class Default extends Component {
                 <Marquee />
               </MarqueeContainer>
             </AnnouncementContainer>
+
             <ProfileContainer
               src={
                 process.env.PUBLIC_URL + `/assets/images/wapp/home-profile.png`
@@ -1078,6 +1085,8 @@ class Default extends Component {
               </ProfileContainerBottom>
             </ProfileContainer>
           </FixedContainer>
+
+          {/* Game Type List */}
           <GameSelectionContainer>
             <GameSelectionUL ref={this.scrollRef}>
               {(() => {
@@ -1099,6 +1108,8 @@ class Default extends Component {
             </GameSelectionUL>
           </GameSelectionContainer>
         </StyledAppBar>
+
+        {/* Game List */}
         <GameListContainer>
           <GameListWrap>
             {(() => {
@@ -1178,6 +1189,7 @@ class Default extends Component {
             >
               ⓧ
             </CloseButton>
+
             <DownloadButton
               onClick={() => {
                 this.props.appHistory.push("/main/download");
@@ -1195,6 +1207,7 @@ class Default extends Component {
             </DownloadButton>
           </DownloadContainer>
         )}
+
         {config.features.HomePage_PromoRoulette && (
           <RouletteFloatingPanel
             position={
@@ -1223,7 +1236,7 @@ class Default extends Component {
                       promotionDetail={{
                         id: roulette.promotionid,
                       }}
-                    ></PromotionRoulette>
+                    />
                   ) : null;
                 })}
             {!config.features.RouletteNewFlow && this.isRouletteAvailable() && (

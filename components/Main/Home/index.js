@@ -1,21 +1,18 @@
 import React from "react";
-import config from "../../../../../config/config";
+import config from "@/config/config";
 import Default from "./default";
 import WGHK from "./wghk";
 
+// if you want to add custom home page by site, add here
+const homeComponentBrandMapping = {
+  WGHK: WGHK,
+};
+
 const Home = (props) => {
-  const homepageSwitcher = (brand, props) => {
-    switch (brand) {
-      case "WGHK":
-        return <WGHK />;
-      default:
-        return (
-          <Default navigate={props.navigate} appHistory={props.appHistory} />
-        );
-    }
-  };
+  const HomeComponent = homeComponentBrandMapping[config.brand] || Default;
+
   return (
-    <React.Fragment>{homepageSwitcher(config.brand, props)}</React.Fragment>
+    <HomeComponent navigate={props.navigate} appHistory={props.appHistory} />
   );
 };
 
