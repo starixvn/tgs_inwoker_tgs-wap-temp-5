@@ -18,6 +18,7 @@ import OnlineUserDisplayer from "@/components/Share/online-user-displayer";
 import { GameService } from "@/api-services/services/GameService";
 import MobileHeader from "@/components/Wap/components/Main/Home/default/MobileHeader";
 import MobileMarquee from "@/components/Wap/components/Main/Home/default/MobileMarquee";
+import { getSortedGameList } from "@/components/Wap/components/Main/Home/default/utils/getSortedGameTypeList";
 const StyledAppBar = withStyles({
   root: {
     height: "650px",
@@ -374,84 +375,6 @@ const RouletteFloatingPanel = styled.div`
     return orientation ? orientation : "column";
   }};
 `;
-
-var sortingHK28 = [
-  GameTypeEnum.LIVELOBBY,
-  GameTypeEnum.SPORTS,
-  GameTypeEnum.ESPORTS,
-  GameTypeEnum.QIPAILOBBY,
-  GameTypeEnum.SLOT,
-  GameTypeEnum.FISH,
-  GameTypeEnum.TABLEGAME,
-  GameTypeEnum.LOTTERYLOBBY,
-];
-
-var sortingSKY = [
-  GameTypeEnum.LIVELOBBY,
-  GameTypeEnum.QIPAILOBBY,
-  GameTypeEnum.SPORTS,
-  GameTypeEnum.FISH,
-  GameTypeEnum.SLOT,
-  GameTypeEnum.TABLEGAME,
-  GameTypeEnum.ESPORTS,
-  GameTypeEnum.LOTTERYLOBBY,
-];
-
-var sortingPB = [
-  GameTypeEnum.SLOT,
-  GameTypeEnum.LIVELOBBY,
-  GameTypeEnum.SPORTS,
-  GameTypeEnum.ESPORTS,
-  GameTypeEnum.TABLEGAME,
-  GameTypeEnum.FISH,
-  GameTypeEnum.LOTTERYLOBBY,
-  GameTypeEnum.QIPAILOBBY,
-];
-
-var sortingWLGHK = [
-  GameTypeEnum.LIVELOBBY,
-  GameTypeEnum.QIPAILOBBY,
-  GameTypeEnum.SPORTS,
-  GameTypeEnum.ESPORTS,
-  GameTypeEnum.FISH,
-  GameTypeEnum.LOTTERYLOBBY,
-  GameTypeEnum.SLOT,
-  GameTypeEnum.TABLEGAME,
-];
-
-var sortingGMO = [
-  GameTypeEnum.LIVELOBBY,
-  GameTypeEnum.QIPAILOBBY,
-  GameTypeEnum.TABLEGAME,
-  GameTypeEnum.FISH,
-  GameTypeEnum.SPORTS,
-  GameTypeEnum.LOTTERYLOBBY,
-  GameTypeEnum.ESPORTS,
-  GameTypeEnum.SLOT,
-];
-
-var sortingPB3 = [
-  GameTypeEnum.SLOT,
-  GameTypeEnum.LIVELOBBY,
-  GameTypeEnum.SPORTS,
-  GameTypeEnum.RNGSPORTS,
-  GameTypeEnum.TABLEGAME,
-  GameTypeEnum.FISH,
-  GameTypeEnum.ESPORTS,
-  GameTypeEnum.QIPAILOBBY,
-  GameTypeEnum.LOTTERYLOBBY,
-];
-
-var sortingBUNNY = [
-  GameTypeEnum.LIVELOBBY,
-  GameTypeEnum.QIPAILOBBY,
-  GameTypeEnum.SPORTS,
-  GameTypeEnum.ESPORTS,
-  GameTypeEnum.LOTTERYLOBBY,
-  GameTypeEnum.SLOT,
-  GameTypeEnum.TABLEGAME,
-  GameTypeEnum.FISH,
-];
 class Default extends Component {
   state = {
     value: 0,
@@ -509,43 +432,32 @@ class Default extends Component {
   cockfightBrandList = ["SM01", "AWC_COCKFIGHT"];
 
   formatSortedGameList() {
-    var currentType = -1;
-    var gameTypeListSorting = [];
-    var displayGameType = Common.GetDisplayGameType();
-
-    this.props.game.homePageGameList
-      .filter((a) => {
-        return displayGameType.indexOf(a.type) >= 0;
-      })
-      .filter((b) => {
-        return b.type !== GameTypeEnum.RNGSPORTS;
-      })
-      .sort((a, b) => {
-        return a.type - b.type;
-      })
-      .map((row, index) => {
-        if (this.cockfightBrandList.includes(row.game_platform_name)) {
-          row.type = GameTypeEnum.COCKFIGHT;
-        }
-        if (currentType !== row.type) {
-          gameTypeListSorting.push(row.type);
-        }
-        currentType = row.type;
-      });
-
-    return gameTypeListSorting.sort((a, b) => {
-      if (config.features.MenuItem_Sorting_WLGHK)
-        return sortingWLGHK.indexOf(a) - sortingWLGHK.indexOf(b);
-      else if (config.features.MenuItem_Sorting_HK28)
-        return sortingHK28.indexOf(a) - sortingHK28.indexOf(b);
-      else if (config.features.MenuItem_Sorting_SKY)
-        return sortingSKY.indexOf(a) - sortingSKY.indexOf(b);
-      else if (config.features.MenuItem_Sorting_PB)
-        return sortingPB.indexOf(a) - sortingPB.indexOf(b);
-      else if (config.features.MenuItem_Sorting_GMO)
-        return sortingGMO.indexOf(a) - sortingGMO.indexOf(b);
-      else return a - b;
-    });
+    // var currentType = -1;
+    // var gameTypeListSorting = [];
+    // var displayGameType = Common.GetDisplayGameType();
+    //
+    // this.props.game.homePageGameList
+    //   .filter((a) => {
+    //     return displayGameType.indexOf(a.type) >= 0;
+    //   })
+    //   .filter((b) => {
+    //     return b.type !== GameTypeEnum.RNGSPORTS;
+    //   })
+    //   .sort((a, b) => {
+    //     return a.type - b.type;
+    //   })
+    //   .map((row, index) => {
+    //     if (this.cockfightBrandList.includes(row.game_platform_name)) {
+    //       row.type = GameTypeEnum.COCKFIGHT;
+    //     }
+    //     if (currentType !== row.type) {
+    //       gameTypeListSorting.push(row.type);
+    //     }
+    //     currentType = row.type;
+    //   });
+    //
+    // return getSortedGameTypeList(gameTypeListSorting);
+    return getSortedGameList(this.props.game.homePageGameList);
   }
 
   consistentTop = 650;
