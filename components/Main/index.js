@@ -212,8 +212,8 @@ class Main extends Component {
     this.setState({ ...this.state, showMenu: false });
   };
 
-  componentRenderer = (route) => {
-    switch (route) {
+  MainComponentRenderer = (page) => {
+    switch (page) {
       case "main":
         return (
           <Home
@@ -222,6 +222,7 @@ class Main extends Component {
             alert={this.props.alert}
           />
         );
+
       case "profile":
         return (
           <My
@@ -230,6 +231,7 @@ class Main extends Component {
             alert={this.props.alert}
           />
         );
+
       case "support":
         return (
           <Support
@@ -238,11 +240,13 @@ class Main extends Component {
             cs={this.handleContactCs}
           />
         );
+
       case "download":
         if (config.features.HaveDownloadFeature)
           return <Download alert={this.props.alert} />;
         else this.props.navigate("/");
         break;
+
       default:
         return (
           <Home
@@ -263,7 +267,8 @@ class Main extends Component {
       ).length > 0;
     return (
       <React.Fragment>
-        {this.componentRenderer(page)}
+        {this.MainComponentRenderer(page)}
+
         <StyledDialog open={this.state.showMenu} onClose={this.handleCloseMenu}>
           <MenuContainer>
             <MenuItemWrap>
@@ -394,6 +399,7 @@ class Main extends Component {
             <ButtonCloseMenu onClick={this.handleCloseMenu}></ButtonCloseMenu>
           </MenuContainer>
         </StyledDialog>
+
         <BottomAppBar
           currentPage={this.state.currentPage}
           handleChangeSelection={this.handleChangeSelection}
