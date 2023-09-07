@@ -3,19 +3,13 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import AppBar from "@material-ui/core/AppBar";
 import { withStyles } from "@material-ui/core/styles";
-
-import Slider from "../Slider";
-
 import { withRouter } from "react-router-dom";
-
 import { GameTypeEnum } from "@/api-services/utils/Enum";
-
 import Common from "@/utils/Common";
-
 import i18n from "@/utils/i18n";
-import Marquee from "../Marquee";
 import config from "@/config/config";
 
+import Slider from "../Slider";
 import CustomPopover from "@/components/Share/custompopover";
 import { SortedMenuList } from "@/utils/HeaderSorting";
 import { Textfit } from "react-textfit";
@@ -39,40 +33,13 @@ const FixedContainer = styled.div`
   position: absolute;
   bottom: -2px;
 `;
-const AnnouncementContainer = styled.div`
-  margin: 10px 23px;
-  display: flex;
-`;
-const AnnouncementTitle = styled.div`
-  font-size: 28px;
 
-  color: #000;
-  font-weight: bold;
-`;
-const MarqueeContainer = styled.div`
-  white-space: nowrap;
-  letter-spacing: 1.5px;
-  font-size: 21px;
-
-  line-hight: 26px;
-  overflow: hidden;
-  margin: 5px 0 0 8px;
-  color: #f6f6f6;
-  width: 100%;
-  flex: 1;
-  height: 36px;
-  border-radius: 17px;
-  background-image: linear-gradient(
-    to top,
-    ${({ theme }) => theme.primaryGradient},
-    ${({ theme }) => theme.primary}
-  );
-`;
 const ProfileContainer = styled.div`
   width: 723px;
   height: 192px;
   margin: 0 auto;
 `;
+
 const ProfileContainerTop = styled.div`
   width: 100%;
   height: 50px;
@@ -81,6 +48,7 @@ const ProfileContainerTop = styled.div`
 
   padding: 15px 25px 0 26px;
 `;
+
 const ProfileContainerBottom = styled.div`
   width: 100%;
 
@@ -91,6 +59,7 @@ const ProfileContainerBottom = styled.div`
     ${({ theme }) => theme.primary}
   );
 `;
+
 const WelcomeLabel = styled.div`
   float: left;
 
@@ -98,6 +67,7 @@ const WelcomeLabel = styled.div`
 
   color: #dfdfdf;
 `;
+
 const WelcomeUsernameLabel = styled(WelcomeLabel)`
   color: #fde73f;
   font-weight: bold;
@@ -110,6 +80,7 @@ const ProfileLink = styled(WelcomeLabel)`
 const DisplayerContainer = styled.div`
   float: right;
 `;
+
 const BalanceContainer = styled.div`
   float: left;
 `;
@@ -121,29 +92,31 @@ const BalanceAmount = styled.div`
   width: 100%;
   margin-top: 35px;
 `;
+
 const WalletTypeLabel = styled(WelcomeLabel)`
   text-align: center;
   width: 100%;
   margin-top: 10px;
 `;
+
 const WalletActionContainer = styled.div`
   float: right;
 `;
+
 const WalletActionUL = styled.ul`
   text-align: center;
-
   margin-top: 15px;
-
   font-size: 28px;
-
   color: #ffffff;
 `;
+
 const WalletActionLI = styled.li`
   display: inline-table;
   padding: 0 10px;
   font-size: 24px;
   text-align: center;
 `;
+
 const WalletActionIcon = styled.div`
   ${(props) => `background:url(${props.img}) no-repeat center center; `}
   background-color: ${(props) => props.theme.secondary};
@@ -153,6 +126,7 @@ const WalletActionIcon = styled.div`
   width: 80px;
   height: 80px;
 `;
+
 const ButtonSignup = styled.div`
   min-width: 195px;
   display: flex;
@@ -170,20 +144,20 @@ const ButtonSignup = styled.div`
 `;
 
 const ButtonStartGame = styled.div`
-width: 148px;
-height: 43px;
-background: url(${
-  process.env.PUBLIC_URL + `/assets/images/wapp/btn-start-game.png`
-}) no-repeat;
-background-size: 100%;
-margin: 150px 0 0 76px;
-font-size:16px;
-font-weight:bold;
-line-height:37px;
-text-align:center;
-color:#fff;
-padding-top: 5px;
-}
+  width: 148px;
+  height: 43px;
+  background: url(${
+    process.env.PUBLIC_URL + `/assets/images/wapp/btn-start-game.png`
+  }) no-repeat;
+  background-size: 100%;
+  margin: 150px 0 0 76px;
+  font-size:16px;
+  font-weight:bold;
+  line-height:37px;
+  text-align:center;
+  color:#fff;
+  padding-top: 5px;
+} 
 `;
 const GameSelectionContainer = styled.div`
   font-size: 48px;
@@ -367,21 +341,6 @@ const Brand = styled.div`
 const Balancex = styled.div`
   text-align: right;
   opacity: 0.75;
-`;
-
-const LogoHolder = styled.div`
-  background: url("${({ img }) => img}") no-repeat left center;
-  background-size: contain;
-  width: 200px;
-  height: 100px;
-`;
-
-const LogoHolderAppBar = styled.div`
-  background: ${({ theme }) => theme.appbar};
-  position: relative;
-  height: 100px;
-  display: flex;
-  justify-content: center;
 `;
 
 const BrandAndBalanceButBigger = styled(BrandAndBalance)`
