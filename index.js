@@ -7,7 +7,7 @@ import { withRouter } from "react-router-dom";
 
 import {
   SHOW_LOGIN,
-  UPDATING_SCREEN_SIZE,
+  UPDATING_SCREEN_SIZE
 } from "../../api-services/constant/actionType";
 import { uiAction } from "../../api-services/actions/uiAction";
 import { gameAction } from "../../api-services/actions/gameAction";
@@ -49,7 +49,7 @@ class Wap extends Component {
       openPopup: false,
       popupUrl: "",
       openAnnouncement: false,
-      showPromotion: false,
+      showPromotion: false
     };
   }
 
@@ -61,11 +61,12 @@ class Wap extends Component {
       window.LiveChatWidget.call("maximize");
       return;
     }
+
     const newURL = this.props.general.livechat
       ? this.props.general.livechat.setting.url
-          .replace("{name}", name)
-          .replace("{lang}", i18n.language)
-          .replace("{email}", email || "")
+        .replace("{name}", name)
+        .replace("{lang}", i18n.language)
+        .replace("{email}", email || "")
       : "";
 
     if (!newURL.length) return;
@@ -86,7 +87,8 @@ class Wap extends Component {
 
   async componentDidMount() {
     Common.loadScript("/js/config.js", () => {
-      Common.loadScript("/js/iovation.js", () => {});
+      Common.loadScript("/js/iovation.js", () => {
+      });
     });
 
     const urlpath = this.props.location.pathname.split("/");
@@ -204,12 +206,12 @@ class Wap extends Component {
           if (isPhoneNull) {
             this.props.history.push({
               pathname: "/profile/phone",
-              state: { forced: true },
+              state: { forced: true }
             });
           } else if (isEmailNull) {
             this.props.history.push({
               pathname: "/profile/email",
-              state: { forced: true },
+              state: { forced: true }
             });
           } else if (!isRegisterCompleted) {
             this.props.history.push("/card/add");
@@ -282,7 +284,7 @@ class Wap extends Component {
       if (isInHomePage) {
         this.setState({
           openAnnouncement: true,
-          showPromotion: false,
+          showPromotion: false
         });
       }
     }
@@ -291,12 +293,12 @@ class Wap extends Component {
       if (
         isInHomePage &&
         this.props.general.promotionList.items !==
-          preProps.general.promotionList.items &&
+        preProps.general.promotionList.items &&
         this.props.general.promotionList.items.length > 0
       ) {
         if (!this.state.openAnnouncement) {
           this.setState({
-            showPromotion: true,
+            showPromotion: true
           });
         }
       }
@@ -334,7 +336,7 @@ class Wap extends Component {
     }
     if (
       preProps.game.providerList.length !==
-        this.props.game.providerList.length &&
+      this.props.game.providerList.length &&
       this.props.account.token !== null
     ) {
       if (
@@ -404,7 +406,7 @@ class Wap extends Component {
       ) {
         this.props.history.push({
           pathname: "/profile/phone",
-          state: { forced: true },
+          state: { forced: true }
         });
       }
     }
@@ -437,7 +439,7 @@ class Wap extends Component {
         title: title,
         message: message,
         open: true,
-        action: action,
+        action: action
       };
     });
   };
@@ -451,13 +453,13 @@ class Wap extends Component {
     this.setState({
       ...this.state,
       popupUrl: url,
-      openPopup: true,
+      openPopup: true
     });
   };
   handleClosePopup = () => {
     this.setState({
       ...this.state,
-      openPopup: false,
+      openPopup: false
     });
   };
 
@@ -477,12 +479,12 @@ class Wap extends Component {
         .setAttribute(
           "content",
           "width=750, initial-scale=" +
-            scale +
-            ", minimum-scale=" +
-            scale +
-            ", maximum-scale=" +
-            scale +
-            ", user-scalable=no"
+          scale +
+          ", minimum-scale=" +
+          scale +
+          ", maximum-scale=" +
+          scale +
+          ", user-scalable=no"
         );
     };
 
@@ -626,7 +628,7 @@ class Wap extends Component {
                     this.setState({
                       ...this.state,
                       openAnnouncement: false,
-                      showPromotion: true,
+                      showPromotion: true
                     });
                   }}
                   text={
@@ -715,7 +717,7 @@ const mapStateToProps = (state) => {
     ui: state.ui,
     screenWidth: state.ui.screenWidth,
     screenHeight: state.ui.screenHeight,
-    wallet: state.wallet,
+    wallet: state.wallet
   };
 };
 
@@ -770,7 +772,7 @@ const mapDispatchToProps = (dispatch) => {
     getPromotion: () => dispatch(generalAction.getPromotion()),
     getPromotionRouletteCount: () =>
       dispatch(generalAction.getPromotionRouletteCount()),
-    getAffiliateStatus: () => dispatch(generalAction.getAffiliateStatus()),
+    getAffiliateStatus: () => dispatch(generalAction.getAffiliateStatus())
   };
 };
 
