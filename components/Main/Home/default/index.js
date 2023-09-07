@@ -22,6 +22,8 @@ import { Textfit } from "react-textfit";
 import PromotionRoulette from "../PromotionRoulette";
 import OnlineUserDisplayer from "@/components/Share/online-user-displayer";
 import { GameService } from "@/api-services/services/GameService";
+import MobileHeader from "@/components/Wap/components/Main/Home/default/MobileHeader";
+import MobileMarquee from "@/components/Wap/components/Main/Home/default/MobileMarquee";
 const StyledAppBar = withStyles({
   root: {
     height: "650px",
@@ -819,30 +821,20 @@ class Default extends Component {
     return (
       <React.Fragment>
         <StyledAppBar position="fixed" color="default">
-          {/* Header */}
-          <LogoHolderAppBar>
-            <LogoHolder
-              img={
-                this.props.general.brand &&
-                this.props.general.brand.mobileLogoUrl
-              }
-            />
-          </LogoHolderAppBar>
+          <MobileHeader
+            img={
+              this.props.general.brand && this.props.general.brand.mobileLogoUrl
+            }
+          />
 
           {/* Carousel */}
           <Slider />
 
-          {/* User Info Block */}
           <FixedContainer>
-            <AnnouncementContainer>
-              <AnnouncementTitle>
-                {i18n.t("wap.main.home.profile.announcement")}
-              </AnnouncementTitle>
-              <MarqueeContainer>
-                <Marquee />
-              </MarqueeContainer>
-            </AnnouncementContainer>
+            {/* Marquee */}
+            <MobileMarquee />
 
+            {/* User Profile Block */}
             <ProfileContainer
               src={
                 process.env.PUBLIC_URL + `/assets/images/wapp/home-profile.png`
@@ -883,6 +875,7 @@ class Default extends Component {
                   </ProfileLink>
                 )}
               </ProfileContainerTop>
+
               <ProfileContainerBottom>
                 <BalanceContainer>
                   {(() => {
