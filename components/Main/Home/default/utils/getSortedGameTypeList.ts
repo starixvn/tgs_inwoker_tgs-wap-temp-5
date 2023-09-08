@@ -102,7 +102,7 @@ const cockfightBrandList = ["SM01", "AWC_COCKFIGHT"];
 
 export function getSortedGameList(gameList: HomePageGame[]) {
   let currentType = -1;
-  const gameTypeListSorting = [];
+  const gameTypeListSorting: number[] = [];
   const displayGameType = Common.GetDisplayGameType();
 
   gameList

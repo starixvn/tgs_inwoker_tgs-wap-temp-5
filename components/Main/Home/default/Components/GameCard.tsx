@@ -1,10 +1,15 @@
 import * as React from "react";
-import i18n from "@/utils/i18n";
 import styled from "styled-components";
+import i18n from "@/utils/i18n";
 import HomePageGame from "@/models/homePageGame";
 import { GameTypeEnum } from "@/api-services/utils/Enum";
 
-const GameFrameImg = styled.div`
+interface GameFrameImgProps {
+  src: string;
+  id: string;
+  onClick: () => void;
+}
+const GameFrameImg = styled.div<GameFrameImgProps>`
   margin: 0 auto 10px auto;
   display: block;
   width: 100%;
@@ -27,7 +32,11 @@ const Maintenance = styled.div`
   text-transform: capitalize;
 `;
 
-const NewWrapper = styled.div`
+interface NewWrapperProps {
+  maintenance: boolean;
+}
+
+const NewWrapper = styled.div<NewWrapperProps>`
   ${({ maintenance }) => {
     return maintenance
       ? `
