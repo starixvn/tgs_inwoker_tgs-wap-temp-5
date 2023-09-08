@@ -1,6 +1,6 @@
 import * as React from "react";
-import i18n from "../../../../../../utils/i18n";
-import Marquee from "../Marquee";
+import i18n from "../../../../../../../utils/i18n";
+import Marquee from "../../Marquee";
 import styled from "styled-components";
 
 const AnnouncementContainer = styled.div`

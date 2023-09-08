@@ -16,9 +16,10 @@ import { Textfit } from "react-textfit";
 import PromotionRoulette from "../PromotionRoulette";
 import OnlineUserDisplayer from "@/components/Share/online-user-displayer";
 import { GameService } from "@/api-services/services/GameService";
-import MobileHeader from "@/components/Wap/components/Main/Home/default/MobileHeader";
-import MobileMarquee from "@/components/Wap/components/Main/Home/default/MobileMarquee";
+import MobileHeader from "@/components/Wap/components/Main/Home/default/Components/MobileHeader";
+import MobileMarquee from "@/components/Wap/components/Main/Home/default/Components/MobileMarquee";
 import { getSortedGameList } from "@/components/Wap/components/Main/Home/default/utils/getSortedGameTypeList";
+import GameCard from "@/components/Wap/components/Main/Home/default/Components/GameCard";
 const StyledAppBar = withStyles({
   root: {
     height: "650px",
@@ -143,23 +144,6 @@ const ButtonSignup = styled.div`
   padding: 17px 0;
   font-size: 28px;
 `;
-
-const ButtonStartGame = styled.div`
-  width: 148px;
-  height: 43px;
-  background: url(${
-    process.env.PUBLIC_URL + `/assets/images/wapp/btn-start-game.png`
-  }) no-repeat;
-  background-size: 100%;
-  margin: 150px 0 0 76px;
-  font-size:16px;
-  font-weight:bold;
-  line-height:37px;
-  text-align:center;
-  color:#fff;
-  padding-top: 5px;
-} 
-`;
 const GameSelectionContainer = styled.div`
   font-size: 48px;
   position: absolute;
@@ -218,48 +202,12 @@ const GameListContainer = styled.div`
   padding-left: 175px;
   background-color: #fff;
 `;
+
 const GameListWrap = styled.div`
   width: 557px;
   padding: 25px 18px;
   border-radius: 10px;
   background-color: #ededed;
-`;
-const GameFrameImg = styled.div`
-  margin: 0 auto 10px auto;
-  display: block;
-  width: 100%;
-  height: 225px;
-  background: url(${(props) => props.src}) no-repeat;
-  background-position: center;
-  background-size: 100%;
-`;
-
-const Maintenance = styled.div`
-  display: none;
-  position: absolute;
-  width: 521px;
-  height: 225px;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  z-index: 1;
-  font-size: 32px;
-  text-transform: capitalize;
-`;
-
-const NewWrapper = styled.div`
-  ${({ maintenance }) => {
-    return maintenance
-      ? `
-      ${GameFrameImg}{
-        filter: brightness(40%) grayscale(200%);
-      }
-      ${Maintenance}{
-        display: flex;
-    
-    }`
-      : ``;
-  }}
 `;
 
 const DownloadContainer = styled.div`
@@ -407,7 +355,9 @@ class Default extends Component {
   componentDidMount() {
     window.addEventListener("scroll", this.handleScroll);
     if (this.props.game.homePageGameList.length > 0) {
-      var gameTypeListSorting = this.formatSortedGameList();
+      var gameTypeListSorting = getSortedGameList(
+        this.props.game.homePageGameList
+      );
       this.setState({
         ...this.state,
         gameTypeListSorting: gameTypeListSorting,
@@ -420,7 +370,9 @@ class Default extends Component {
       preProps.game.homePageGameList.length !==
       this.props.game.homePageGameList.length
     ) {
-      var gameTypeListSorting = this.formatSortedGameList();
+      var gameTypeListSorting = getSortedGameList(
+        this.props.game.homePageGameList
+      );
       this.setState({
         ...this.state,
         gameTypeListSorting: gameTypeListSorting,
@@ -428,39 +380,6 @@ class Default extends Component {
       });
     }
   }
-
-  cockfightBrandList = ["SM01", "AWC_COCKFIGHT"];
-
-  formatSortedGameList() {
-    // var currentType = -1;
-    // var gameTypeListSorting = [];
-    // var displayGameType = Common.GetDisplayGameType();
-    //
-    // this.props.game.homePageGameList
-    //   .filter((a) => {
-    //     return displayGameType.indexOf(a.type) >= 0;
-    //   })
-    //   .filter((b) => {
-    //     return b.type !== GameTypeEnum.RNGSPORTS;
-    //   })
-    //   .sort((a, b) => {
-    //     return a.type - b.type;
-    //   })
-    //   .map((row, index) => {
-    //     if (this.cockfightBrandList.includes(row.game_platform_name)) {
-    //       row.type = GameTypeEnum.COCKFIGHT;
-    //     }
-    //     if (currentType !== row.type) {
-    //       gameTypeListSorting.push(row.type);
-    //     }
-    //     currentType = row.type;
-    //   });
-    //
-    // return getSortedGameTypeList(gameTypeListSorting);
-    return getSortedGameList(this.props.game.homePageGameList);
-  }
-
-  consistentTop = 650;
 
   constructor(props) {
     super(props);
@@ -479,6 +398,7 @@ class Default extends Component {
       this.state.gameTypeListSorting.indexOf(this.state.selectedGameType) < 6;
     let reachedTheSeventhItem =
       this.state.gameTypeListSorting.indexOf(this.state.selectedGameType) >= 6;
+
     if (this.state.gameTypeListSorting.length > 5) {
       if (reachedTheForthItem) {
         this.scrollRef.current.scrollTo(0, 500);
@@ -504,12 +424,13 @@ class Default extends Component {
       D.body.clientHeight,
       D.documentElement.clientHeight
     );
-    var gameTypeListSorting = this.state.gameTypeListSorting;
+
+    const gameTypeListSorting = this.state.gameTypeListSorting;
     let gameType = gameTypeListSorting[0];
     if (window.innerHeight + window.scrollY >= docHeight - 2) {
       gameType = gameTypeListSorting[gameTypeListSorting.length - 1];
     } else {
-      for (var i = gameTypeListSorting.length - 1; i >= 0; i--) {
+      for (let i = gameTypeListSorting.length - 1; i >= 0; i--) {
         if (
           top >
           document.getElementById("gameType" + gameTypeListSorting[i]).offsetTop
@@ -521,10 +442,12 @@ class Default extends Component {
     }
     this.setState({ ...this.state, selectedGameType: gameType });
   };
-  handleGameTypeClick = (gameType) => {
-    let pos = document.getElementById("gameType" + gameType).offsetTop;
 
-    window.scrollTo({ top: pos - this.consistentTop + 5, behavior: "smooth" });
+  handleGameTypeClick = (selectedGameType) => {
+    const consistentTop = 650;
+
+    let pos = document.getElementById("gameType" + selectedGameType).offsetTop;
+    window.scrollTo({ top: pos - consistentTop + 5, behavior: "smooth" });
   };
   handleJoinLotteryGame = (name) => {
     if (this.props.account.token != null) {
@@ -978,7 +901,9 @@ class Default extends Component {
           <GameListWrap>
             {(() => {
               var displayGameType = Common.GetDisplayGameType();
+
               var currentType = -1;
+
               return this.props.game.homePageGameList
                 .filter(
                   (a) =>
@@ -1004,37 +929,21 @@ class Default extends Component {
                   );
                 })
                 .map((row, index) => {
-                  var jsx = (
-                    <NewWrapper key={index} maintenance={row.status != 0}>
-                      <Maintenance>
-                        {i18n.t("transfer.maintenance")}
-                      </Maintenance>
-                      <GameFrameImg
-                        src={`${
-                          process.env.PUBLIC_URL
-                        }/assets/images/wapGame/${this.getImgPrefix(
-                          row.type
-                        )}-${row.abbreviation.toLowerCase()}.png`}
-                        key={index}
-                        id={
-                          currentType !== row.type
-                            ? `gameType${row.type}`
-                            : `gameId${row.id}`
-                        }
-                        onClick={() => {
-                          this.handleGameClick(
-                            row.type,
-                            row.gpcode,
-                            row.game_platform_id
-                          );
-                        }}
-                      >
-                        <ButtonStartGame>
-                          {i18n.t("common.startGame")}
-                        </ButtonStartGame>
-                      </GameFrameImg>
-                    </NewWrapper>
+                  const id =
+                    currentType !== row.type
+                      ? `gameType${row.type}`
+                      : `gameId${row.id}`;
+
+                  const jsx = (
+                    <GameCard
+                      key={index}
+                      isMaintenance={row.status !== 0}
+                      homePageGame={row}
+                      id={id}
+                      handleGameClick={this.handleGameClick}
+                    />
                   );
+
                   currentType = row.type;
                   return jsx;
                 });
