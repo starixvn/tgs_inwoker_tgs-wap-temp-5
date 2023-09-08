@@ -134,8 +134,8 @@ function getImgPrefix(gameType: number) {
       return "esports";
     case GameTypeEnum.COCKFIGHT:
       return "cockfight";
-    case GameTypeEnum.TIGERSLOT:
-      return "slot";
+    // case GameTypeEnum.TIGERSLOT:
+    //   return "slot";
     case GameTypeEnum.TABLEGAME:
       return "table";
     default:
