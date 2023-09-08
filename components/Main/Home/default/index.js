@@ -3,27 +3,23 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import AppBar from "@material-ui/core/AppBar";
 import { withStyles } from "@material-ui/core/styles";
-
-import Slider from "../Slider";
-
 import { withRouter } from "react-router-dom";
-
 import { GameTypeEnum } from "@/api-services/utils/Enum";
-
 import Common from "@/utils/Common";
-
 import i18n from "@/utils/i18n";
-import Marquee from "../Marquee";
 import config from "@/config/config";
 
+import Slider from "../Slider";
 import CustomPopover from "@/components/Share/custompopover";
 import { SortedMenuList } from "@/utils/HeaderSorting";
 import { Textfit } from "react-textfit";
 import PromotionRoulette from "../PromotionRoulette";
 import OnlineUserDisplayer from "@/components/Share/online-user-displayer";
 import { GameService } from "@/api-services/services/GameService";
-import MobileHeader from "@/components/Wap/components/Main/Home/default/MobileHeader";
-import MobileMarquee from "@/components/Wap/components/Main/Home/default/MobileMarquee";
+import MobileHeader from "@/components/Wap/components/Main/Home/default/Components/MobileHeader";
+import MobileMarquee from "@/components/Wap/components/Main/Home/default/Components/MobileMarquee";
+import { getSortedGameList } from "@/components/Wap/components/Main/Home/default/utils/getSortedGameTypeList";
+import GameCard from "@/components/Wap/components/Main/Home/default/Components/GameCard";
 const StyledAppBar = withStyles({
   root: {
     height: "650px",
@@ -39,40 +35,13 @@ const FixedContainer = styled.div`
   position: absolute;
   bottom: -2px;
 `;
-const AnnouncementContainer = styled.div`
-  margin: 10px 23px;
-  display: flex;
-`;
-const AnnouncementTitle = styled.div`
-  font-size: 28px;
 
-  color: #000;
-  font-weight: bold;
-`;
-const MarqueeContainer = styled.div`
-  white-space: nowrap;
-  letter-spacing: 1.5px;
-  font-size: 21px;
-
-  line-hight: 26px;
-  overflow: hidden;
-  margin: 5px 0 0 8px;
-  color: #f6f6f6;
-  width: 100%;
-  flex: 1;
-  height: 36px;
-  border-radius: 17px;
-  background-image: linear-gradient(
-    to top,
-    ${({ theme }) => theme.primaryGradient},
-    ${({ theme }) => theme.primary}
-  );
-`;
 const ProfileContainer = styled.div`
   width: 723px;
   height: 192px;
   margin: 0 auto;
 `;
+
 const ProfileContainerTop = styled.div`
   width: 100%;
   height: 50px;
@@ -81,6 +50,7 @@ const ProfileContainerTop = styled.div`
 
   padding: 15px 25px 0 26px;
 `;
+
 const ProfileContainerBottom = styled.div`
   width: 100%;
 
@@ -91,6 +61,7 @@ const ProfileContainerBottom = styled.div`
     ${({ theme }) => theme.primary}
   );
 `;
+
 const WelcomeLabel = styled.div`
   float: left;
 
@@ -98,6 +69,7 @@ const WelcomeLabel = styled.div`
 
   color: #dfdfdf;
 `;
+
 const WelcomeUsernameLabel = styled(WelcomeLabel)`
   color: #fde73f;
   font-weight: bold;
@@ -110,6 +82,7 @@ const ProfileLink = styled(WelcomeLabel)`
 const DisplayerContainer = styled.div`
   float: right;
 `;
+
 const BalanceContainer = styled.div`
   float: left;
 `;
@@ -121,29 +94,31 @@ const BalanceAmount = styled.div`
   width: 100%;
   margin-top: 35px;
 `;
+
 const WalletTypeLabel = styled(WelcomeLabel)`
   text-align: center;
   width: 100%;
   margin-top: 10px;
 `;
+
 const WalletActionContainer = styled.div`
   float: right;
 `;
+
 const WalletActionUL = styled.ul`
   text-align: center;
-
   margin-top: 15px;
-
   font-size: 28px;
-
   color: #ffffff;
 `;
+
 const WalletActionLI = styled.li`
   display: inline-table;
   padding: 0 10px;
   font-size: 24px;
   text-align: center;
 `;
+
 const WalletActionIcon = styled.div`
   ${(props) => `background:url(${props.img}) no-repeat center center; `}
   background-color: ${(props) => props.theme.secondary};
@@ -153,6 +128,7 @@ const WalletActionIcon = styled.div`
   width: 80px;
   height: 80px;
 `;
+
 const ButtonSignup = styled.div`
   min-width: 195px;
   display: flex;
@@ -167,23 +143,6 @@ const ButtonSignup = styled.div`
   text-align: center;
   padding: 17px 0;
   font-size: 28px;
-`;
-
-const ButtonStartGame = styled.div`
-width: 148px;
-height: 43px;
-background: url(${
-  process.env.PUBLIC_URL + `/assets/images/wapp/btn-start-game.png`
-}) no-repeat;
-background-size: 100%;
-margin: 150px 0 0 76px;
-font-size:16px;
-font-weight:bold;
-line-height:37px;
-text-align:center;
-color:#fff;
-padding-top: 5px;
-}
 `;
 const GameSelectionContainer = styled.div`
   font-size: 48px;
@@ -243,48 +202,12 @@ const GameListContainer = styled.div`
   padding-left: 175px;
   background-color: #fff;
 `;
+
 const GameListWrap = styled.div`
   width: 557px;
   padding: 25px 18px;
   border-radius: 10px;
   background-color: #ededed;
-`;
-const GameFrameImg = styled.div`
-  margin: 0 auto 10px auto;
-  display: block;
-  width: 100%;
-  height: 225px;
-  background: url(${(props) => props.src}) no-repeat;
-  background-position: center;
-  background-size: 100%;
-`;
-
-const Maintenance = styled.div`
-  display: none;
-  position: absolute;
-  width: 521px;
-  height: 225px;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  z-index: 1;
-  font-size: 32px;
-  text-transform: capitalize;
-`;
-
-const NewWrapper = styled.div`
-  ${({ maintenance }) => {
-    return maintenance
-      ? `
-      ${GameFrameImg}{
-        filter: brightness(40%) grayscale(200%);
-      }
-      ${Maintenance}{
-        display: flex;
-    
-    }`
-      : ``;
-  }}
 `;
 
 const DownloadContainer = styled.div`
@@ -369,21 +292,6 @@ const Balancex = styled.div`
   opacity: 0.75;
 `;
 
-const LogoHolder = styled.div`
-  background: url("${({ img }) => img}") no-repeat left center;
-  background-size: contain;
-  width: 200px;
-  height: 100px;
-`;
-
-const LogoHolderAppBar = styled.div`
-  background: ${({ theme }) => theme.appbar};
-  position: relative;
-  height: 100px;
-  display: flex;
-  justify-content: center;
-`;
-
 const BrandAndBalanceButBigger = styled(BrandAndBalance)`
   border-bottom: solid 1px ${({ theme }) => theme.popoverSubWalletText};
   margin-bottom: 20px;
@@ -415,84 +323,6 @@ const RouletteFloatingPanel = styled.div`
     return orientation ? orientation : "column";
   }};
 `;
-
-var sortingHK28 = [
-  GameTypeEnum.LIVELOBBY,
-  GameTypeEnum.SPORTS,
-  GameTypeEnum.ESPORTS,
-  GameTypeEnum.QIPAILOBBY,
-  GameTypeEnum.SLOT,
-  GameTypeEnum.FISH,
-  GameTypeEnum.TABLEGAME,
-  GameTypeEnum.LOTTERYLOBBY,
-];
-
-var sortingSKY = [
-  GameTypeEnum.LIVELOBBY,
-  GameTypeEnum.QIPAILOBBY,
-  GameTypeEnum.SPORTS,
-  GameTypeEnum.FISH,
-  GameTypeEnum.SLOT,
-  GameTypeEnum.TABLEGAME,
-  GameTypeEnum.ESPORTS,
-  GameTypeEnum.LOTTERYLOBBY,
-];
-
-var sortingPB = [
-  GameTypeEnum.SLOT,
-  GameTypeEnum.LIVELOBBY,
-  GameTypeEnum.SPORTS,
-  GameTypeEnum.ESPORTS,
-  GameTypeEnum.TABLEGAME,
-  GameTypeEnum.FISH,
-  GameTypeEnum.LOTTERYLOBBY,
-  GameTypeEnum.QIPAILOBBY,
-];
-
-var sortingWLGHK = [
-  GameTypeEnum.LIVELOBBY,
-  GameTypeEnum.QIPAILOBBY,
-  GameTypeEnum.SPORTS,
-  GameTypeEnum.ESPORTS,
-  GameTypeEnum.FISH,
-  GameTypeEnum.LOTTERYLOBBY,
-  GameTypeEnum.SLOT,
-  GameTypeEnum.TABLEGAME,
-];
-
-var sortingGMO = [
-  GameTypeEnum.LIVELOBBY,
-  GameTypeEnum.QIPAILOBBY,
-  GameTypeEnum.TABLEGAME,
-  GameTypeEnum.FISH,
-  GameTypeEnum.SPORTS,
-  GameTypeEnum.LOTTERYLOBBY,
-  GameTypeEnum.ESPORTS,
-  GameTypeEnum.SLOT,
-];
-
-var sortingPB3 = [
-  GameTypeEnum.SLOT,
-  GameTypeEnum.LIVELOBBY,
-  GameTypeEnum.SPORTS,
-  GameTypeEnum.RNGSPORTS,
-  GameTypeEnum.TABLEGAME,
-  GameTypeEnum.FISH,
-  GameTypeEnum.ESPORTS,
-  GameTypeEnum.QIPAILOBBY,
-  GameTypeEnum.LOTTERYLOBBY,
-];
-
-var sortingBUNNY = [
-  GameTypeEnum.LIVELOBBY,
-  GameTypeEnum.QIPAILOBBY,
-  GameTypeEnum.SPORTS,
-  GameTypeEnum.ESPORTS,
-  GameTypeEnum.LOTTERYLOBBY,
-  GameTypeEnum.SLOT,
-  GameTypeEnum.TABLEGAME,
-  GameTypeEnum.FISH,
-];
 class Default extends Component {
   state = {
     value: 0,
@@ -525,7 +355,9 @@ class Default extends Component {
   componentDidMount() {
     window.addEventListener("scroll", this.handleScroll);
     if (this.props.game.homePageGameList.length > 0) {
-      var gameTypeListSorting = this.formatSortedGameList();
+      var gameTypeListSorting = getSortedGameList(
+        this.props.game.homePageGameList
+      );
       this.setState({
         ...this.state,
         gameTypeListSorting: gameTypeListSorting,
@@ -538,7 +370,9 @@ class Default extends Component {
       preProps.game.homePageGameList.length !==
       this.props.game.homePageGameList.length
     ) {
-      var gameTypeListSorting = this.formatSortedGameList();
+      var gameTypeListSorting = getSortedGameList(
+        this.props.game.homePageGameList
+      );
       this.setState({
         ...this.state,
         gameTypeListSorting: gameTypeListSorting,
@@ -546,50 +380,6 @@ class Default extends Component {
       });
     }
   }
-
-  cockfightBrandList = ["SM01", "AWC_COCKFIGHT"];
-
-  formatSortedGameList() {
-    var currentType = -1;
-    var gameTypeListSorting = [];
-    var displayGameType = Common.GetDisplayGameType();
-
-    this.props.game.homePageGameList
-      .filter((a) => {
-        return displayGameType.indexOf(a.type) >= 0;
-      })
-      .filter((b) => {
-        return b.type !== GameTypeEnum.RNGSPORTS;
-      })
-      .sort((a, b) => {
-        return a.type - b.type;
-      })
-      .map((row, index) => {
-        if (this.cockfightBrandList.includes(row.game_platform_name)) {
-          row.type = GameTypeEnum.COCKFIGHT;
-        }
-        if (currentType !== row.type) {
-          gameTypeListSorting.push(row.type);
-        }
-        currentType = row.type;
-      });
-
-    return gameTypeListSorting.sort((a, b) => {
-      if (config.features.MenuItem_Sorting_WLGHK)
-        return sortingWLGHK.indexOf(a) - sortingWLGHK.indexOf(b);
-      else if (config.features.MenuItem_Sorting_HK28)
-        return sortingHK28.indexOf(a) - sortingHK28.indexOf(b);
-      else if (config.features.MenuItem_Sorting_SKY)
-        return sortingSKY.indexOf(a) - sortingSKY.indexOf(b);
-      else if (config.features.MenuItem_Sorting_PB)
-        return sortingPB.indexOf(a) - sortingPB.indexOf(b);
-      else if (config.features.MenuItem_Sorting_GMO)
-        return sortingGMO.indexOf(a) - sortingGMO.indexOf(b);
-      else return a - b;
-    });
-  }
-
-  consistentTop = 650;
 
   constructor(props) {
     super(props);
@@ -608,6 +398,7 @@ class Default extends Component {
       this.state.gameTypeListSorting.indexOf(this.state.selectedGameType) < 6;
     let reachedTheSeventhItem =
       this.state.gameTypeListSorting.indexOf(this.state.selectedGameType) >= 6;
+
     if (this.state.gameTypeListSorting.length > 5) {
       if (reachedTheForthItem) {
         this.scrollRef.current.scrollTo(0, 500);
@@ -633,12 +424,13 @@ class Default extends Component {
       D.body.clientHeight,
       D.documentElement.clientHeight
     );
-    var gameTypeListSorting = this.state.gameTypeListSorting;
+
+    const gameTypeListSorting = this.state.gameTypeListSorting;
     let gameType = gameTypeListSorting[0];
     if (window.innerHeight + window.scrollY >= docHeight - 2) {
       gameType = gameTypeListSorting[gameTypeListSorting.length - 1];
     } else {
-      for (var i = gameTypeListSorting.length - 1; i >= 0; i--) {
+      for (let i = gameTypeListSorting.length - 1; i >= 0; i--) {
         if (
           top >
           document.getElementById("gameType" + gameTypeListSorting[i]).offsetTop
@@ -650,10 +442,12 @@ class Default extends Component {
     }
     this.setState({ ...this.state, selectedGameType: gameType });
   };
-  handleGameTypeClick = (gameType) => {
-    let pos = document.getElementById("gameType" + gameType).offsetTop;
 
-    window.scrollTo({ top: pos - this.consistentTop + 5, behavior: "smooth" });
+  handleGameTypeClick = (selectedGameType) => {
+    const consistentTop = 650;
+
+    let pos = document.getElementById("gameType" + selectedGameType).offsetTop;
+    window.scrollTo({ top: pos - consistentTop + 5, behavior: "smooth" });
   };
   handleJoinLotteryGame = (name) => {
     if (this.props.account.token != null) {
@@ -1107,7 +901,9 @@ class Default extends Component {
           <GameListWrap>
             {(() => {
               var displayGameType = Common.GetDisplayGameType();
+
               var currentType = -1;
+
               return this.props.game.homePageGameList
                 .filter(
                   (a) =>
@@ -1133,37 +929,21 @@ class Default extends Component {
                   );
                 })
                 .map((row, index) => {
-                  var jsx = (
-                    <NewWrapper key={index} maintenance={row.status != 0}>
-                      <Maintenance>
-                        {i18n.t("transfer.maintenance")}
-                      </Maintenance>
-                      <GameFrameImg
-                        src={`${
-                          process.env.PUBLIC_URL
-                        }/assets/images/wapGame/${this.getImgPrefix(
-                          row.type
-                        )}-${row.abbreviation.toLowerCase()}.png`}
-                        key={index}
-                        id={
-                          currentType !== row.type
-                            ? `gameType${row.type}`
-                            : `gameId${row.id}`
-                        }
-                        onClick={() => {
-                          this.handleGameClick(
-                            row.type,
-                            row.gpcode,
-                            row.game_platform_id
-                          );
-                        }}
-                      >
-                        <ButtonStartGame>
-                          {i18n.t("common.startGame")}
-                        </ButtonStartGame>
-                      </GameFrameImg>
-                    </NewWrapper>
+                  const id =
+                    currentType !== row.type
+                      ? `gameType${row.type}`
+                      : `gameId${row.id}`;
+
+                  const jsx = (
+                    <GameCard
+                      key={index}
+                      isMaintenance={row.status !== 0}
+                      homePageGame={row}
+                      id={id}
+                      handleGameClick={this.handleGameClick}
+                    />
                   );
+
                   currentType = row.type;
                   return jsx;
                 });
