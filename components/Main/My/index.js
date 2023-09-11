@@ -3,8 +3,8 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import AppBar from "@material-ui/core/AppBar";
 import { withStyles } from "@material-ui/core/styles";
-import { accountAction } from "../../../../../api-services/actions/accountAction";
-import { walletAction } from "../../../../../api-services/actions/walletAction";
+import { accountAction } from "@/api-services/actions/accountAction";
+import { walletAction } from "@/api-services/actions/walletAction";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 
@@ -17,8 +17,6 @@ const StyledAppBar = withStyles((theme) => ({
   root: {
     height: "370px",
     display: "block",
-    background: theme.palette.primary.main,
-
     background:
       `linear-gradient(rgba(` +
       theme.palette.primary.mainRgb +
@@ -216,10 +214,11 @@ class My extends Component {
   };
 
   render() {
-    var checkTransferWallet =
+    const hasTransferProvider =
       Object.values(this.props.game.providerList).filter(
         (item) => item.transferwallet === true
       ).length > 0;
+
     return (
       <Container>
         <StyledAppBar position="fixed" color="default">
@@ -292,7 +291,7 @@ class My extends Component {
               ></IconImg>
               <IconLabel>{i18n.t("common.deposit")}</IconLabel>
             </IconColumn>
-            {checkTransferWallet && !config.features.NewTransferUI && (
+            {hasTransferProvider && !config.features.NewTransferUI && (
               <IconColumn onClick={() => this.props.navigate("/transfer")}>
                 <IconImg
                   src={
@@ -386,7 +385,7 @@ class My extends Component {
           >
             {i18n.t("wap.main.account.deposit")}
           </ListItem>
-          {checkTransferWallet && (
+          {hasTransferProvider && (
             <ListItem
               icon={
                 process.env.PUBLIC_URL +

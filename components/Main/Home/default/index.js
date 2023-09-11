@@ -354,31 +354,32 @@ class Default extends Component {
 
   componentDidMount() {
     window.addEventListener("scroll", this.handleScroll);
-    if (this.props.game.homePageGameList.length > 0) {
-      var gameTypeListSorting = getSortedGameList(
-        this.props.game.homePageGameList
-      );
-      this.setState({
-        ...this.state,
-        gameTypeListSorting: gameTypeListSorting,
-        selectedGameType: gameTypeListSorting[0],
-      });
-    }
+    if (this.props.game.homePageGameList.length <= 0) return;
+
+    const gameTypeListSorting = getSortedGameList(
+      this.props.game.homePageGameList
+    );
+    this.setState({
+      ...this.state,
+      gameTypeListSorting: gameTypeListSorting,
+      selectedGameType: gameTypeListSorting[0],
+    });
   }
   componentDidUpdate(preProps) {
-    if (
+    const isGameListUpdated =
       preProps.game.homePageGameList.length !==
-      this.props.game.homePageGameList.length
-    ) {
-      var gameTypeListSorting = getSortedGameList(
-        this.props.game.homePageGameList
-      );
-      this.setState({
-        ...this.state,
-        gameTypeListSorting: gameTypeListSorting,
-        selectedGameType: gameTypeListSorting[0],
-      });
-    }
+      this.props.game.homePageGameList.length;
+    if (!isGameListUpdated) return;
+
+    const gameTypeListSorting = getSortedGameList(
+      this.props.game.homePageGameList
+    );
+
+    this.setState({
+      ...this.state,
+      gameTypeListSorting: gameTypeListSorting,
+      selectedGameType: gameTypeListSorting[0],
+    });
   }
 
   constructor(props) {
@@ -449,15 +450,16 @@ class Default extends Component {
     let pos = document.getElementById("gameType" + selectedGameType).offsetTop;
     window.scrollTo({ top: pos - consistentTop + 5, behavior: "smooth" });
   };
-  handleJoinLotteryGame = (name) => {
-    if (this.props.account.token != null) {
-      //  window.open( "/joinlottery/" + name, "gamewindow");
 
-      Common.closePreviousPopup();
-      Common.PopupCenter("/joinlottery/" + name, "gamewindow");
-    } else {
+  handleJoinLotteryGame = (name) => {
+    if (!this.props.account.token) {
       this.props.appHistory.push("/login");
+      return;
     }
+
+    //  window.open( "/joinlottery/" + name, "gamewindow");
+    Common.closePreviousPopup();
+    Common.PopupCenter("/joinlottery/" + name, "gamewindow");
   };
 
   handleJoinOtherGame = (type, params, game_platform_id) => {
@@ -465,6 +467,7 @@ class Default extends Component {
       this.props.appHistory.push("/login");
       return;
     }
+
     if (type === GameTypeEnum.COCKFIGHT) {
       if (params === "SM01") {
         this.popup = window.open("", "Cockfight");
@@ -514,9 +517,11 @@ class Default extends Component {
         : this.handleJoinOtherGame(type, params, game_platform_id);
     }
   };
+
   handleSignupClick = () => {
     this.props.appHistory.push("/login");
   };
+
   convertGameTypeToText(gameType) {
     switch (gameType) {
       case GameTypeEnum.LIVE:
@@ -542,38 +547,6 @@ class Default extends Component {
       case GameTypeEnum.TIGERSLOT:
       case GameTypeEnum.TABLEGAME:
         return i18n.t("wap.main.home.gameTab.electron");
-      default:
-        return "";
-    }
-  }
-
-  getImgPrefix(gameType) {
-    switch (gameType) {
-      case GameTypeEnum.FISH:
-        return "fish";
-      case GameTypeEnum.LIVE:
-        return "live";
-      case GameTypeEnum.LIVELOBBY:
-        return "live";
-      case GameTypeEnum.LOTTERYLOBBY:
-        return "lottery";
-      case GameTypeEnum.QIPAI:
-        return "chess";
-      case GameTypeEnum.QIPAILOBBY:
-        return "chess";
-      case GameTypeEnum.SLOT:
-        return "slot";
-      case GameTypeEnum.SPORTS:
-      case GameTypeEnum.RNGSPORTS:
-        return "sports";
-      case GameTypeEnum.ESPORTS:
-        return "esports";
-      case GameTypeEnum.COCKFIGHT:
-        return "cockfight";
-      case GameTypeEnum.TIGERSLOT:
-        return "slot";
-      case GameTypeEnum.TABLEGAME:
-        return "table";
       default:
         return "";
     }
@@ -606,14 +579,45 @@ class Default extends Component {
     );
   };
 
+  getDisplayedGameList = (homePageGameList) => {
+    const displayGameType = Common.GetDisplayGameType();
+
+    return homePageGameList
+      .filter(
+        (a) =>
+          (displayGameType.indexOf(a.type) >= 0 &&
+            a.type !== GameTypeEnum.RNGSPORTS) ||
+          (a.type === GameTypeEnum.RNGSPORTS && a.abbreviation === "PPTF")
+      )
+      .sort((a, b) => {
+        if (config.features.LiveGame_Sorting_SKY) {
+          var sortDGFirst = ["DG"];
+          return (
+            sortDGFirst.indexOf(b.abbreviation) -
+            sortDGFirst.indexOf(a.abbreviation)
+          );
+        } else return b - a;
+      })
+      .sort((a, b) => {
+        return (
+          this.state.gameTypeListSorting.indexOf(a.type) -
+          this.state.gameTypeListSorting.indexOf(b.type)
+        );
+      });
+  };
+
   render() {
-    var checkTransferWallet =
+    const hasTransferProvider =
       Object.values(this.props.game.providerList).filter(
         (item) => item.transferwallet === true
       ).length > 0;
 
+    const displayedGameList = this.getDisplayedGameList(
+      this.props.game.homePageGameList
+    );
+
     return (
-      <React.Fragment>
+      <>
         <StyledAppBar position="fixed" color="default">
           <MobileHeader
             img={
@@ -827,7 +831,7 @@ class Default extends Component {
                       ></WalletActionIcon>
                       {i18n.t("common.deposit")}
                     </WalletActionLI>
-                    {checkTransferWallet && (
+                    {hasTransferProvider && (
                       <WalletActionLI
                         onClick={() => this.props.appHistory.push("/transfer")}
                       >
@@ -900,56 +904,33 @@ class Default extends Component {
         <GameListContainer>
           <GameListWrap>
             {(() => {
-              var displayGameType = Common.GetDisplayGameType();
+              const displayGameType = Common.GetDisplayGameType();
 
-              var currentType = -1;
+              let currentType = -1;
 
-              return this.props.game.homePageGameList
-                .filter(
-                  (a) =>
-                    (displayGameType.indexOf(a.type) >= 0 &&
-                      a.type !== GameTypeEnum.RNGSPORTS) ||
-                    (a.type === GameTypeEnum.RNGSPORTS &&
-                      a.abbreviation === "PPTF")
-                )
-                .sort((a, b) => {
-                  if (config.features.LiveGame_Sorting_SKY) {
-                    var sortDGFirst = ["DG"];
-                    return (
-                      sortDGFirst.indexOf(b.abbreviation) -
-                      sortDGFirst.indexOf(a.abbreviation)
-                    );
-                  } else return b - a;
-                })
+              return displayedGameList.map((row, index) => {
+                const id =
+                  currentType !== row.type
+                    ? `gameType${row.type}`
+                    : `gameId${row.id}`;
 
-                .sort((a, b) => {
-                  return (
-                    this.state.gameTypeListSorting.indexOf(a.type) -
-                    this.state.gameTypeListSorting.indexOf(b.type)
-                  );
-                })
-                .map((row, index) => {
-                  const id =
-                    currentType !== row.type
-                      ? `gameType${row.type}`
-                      : `gameId${row.id}`;
+                const jsx = (
+                  <GameCard
+                    key={index}
+                    isMaintenance={row.status !== 0}
+                    homePageGame={row}
+                    id={id}
+                    handleGameClick={this.handleGameClick}
+                  />
+                );
 
-                  const jsx = (
-                    <GameCard
-                      key={index}
-                      isMaintenance={row.status !== 0}
-                      homePageGame={row}
-                      id={id}
-                      handleGameClick={this.handleGameClick}
-                    />
-                  );
-
-                  currentType = row.type;
-                  return jsx;
-                });
+                currentType = row.type;
+                return jsx;
+              });
             })()}
           </GameListWrap>
         </GameListContainer>
+
         {config.features.HaveDownloadFeature && this.state.downloadButton && (
           <DownloadContainer>
             <CloseButton
@@ -965,6 +946,8 @@ class Default extends Component {
 
             <DownloadButton
               onClick={() => {
+                console.log("download");
+                console.log(this.props);
                 this.props.appHistory.push("/main/download");
               }}
             >
@@ -1012,6 +995,7 @@ class Default extends Component {
                     />
                   ) : null;
                 })}
+
             {!config.features.RouletteNewFlow && this.isRouletteAvailable() && (
               <PromotionRoulette
                 rouletteType="ROULETTE"
@@ -1020,11 +1004,11 @@ class Default extends Component {
                     (item) => item.promotionType.toUpperCase() === "ROULETTE"
                   )[0]
                 }
-              ></PromotionRoulette>
+              />
             )}
           </RouletteFloatingPanel>
         )}
-      </React.Fragment>
+      </>
     );
   }
 }

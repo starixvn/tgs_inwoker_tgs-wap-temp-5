@@ -69,6 +69,7 @@ class Main extends Component {
       this.props.appHistory.push(value);
     }
   };
+
   toggleMenu = () => {
     if (this.props.account.token == null) {
       this.props.appHistory.push("/login");
@@ -76,8 +77,13 @@ class Main extends Component {
       this.setState({ ...this.state, showMenu: true });
     }
   };
+
   handleCloseMenu = () => {
     this.setState({ ...this.state, showMenu: false });
+  };
+
+  handleAlert = (title, message) => {
+    this.props.alert(title, message);
   };
 
   MainComponentRenderer = (page) => {
@@ -124,10 +130,6 @@ class Main extends Component {
           />
         );
     }
-  };
-
-  handleAlert = (title, message) => {
-    this.props.alert(title, message);
   };
 
   render() {
