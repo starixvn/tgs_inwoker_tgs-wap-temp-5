@@ -20,6 +20,7 @@ import MobileHeader from "@/components/Wap/components/Main/Home/default/Componen
 import MobileMarquee from "@/components/Wap/components/Main/Home/default/Components/MobileMarquee";
 import { getSortedGameList } from "@/components/Wap/components/Main/Home/default/utils/getSortedGameTypeList";
 import GameCard from "@/components/Wap/components/Main/Home/default/Components/GameCard";
+// import UserProfile from "@/components/Wap/components/Main/Home/default/Components/UserProfile";
 const StyledAppBar = withStyles({
   root: {
     height: "650px",
@@ -607,6 +608,8 @@ class Default extends Component {
   };
 
   render() {
+    const brandLogo =
+      this.props.general.brand && this.props.general.brand.mobileLogoUrl;
     const hasTransferProvider =
       Object.values(this.props.game.providerList).filter(
         (item) => item.transferwallet === true
@@ -619,11 +622,7 @@ class Default extends Component {
     return (
       <>
         <StyledAppBar position="fixed" color="default">
-          <MobileHeader
-            img={
-              this.props.general.brand && this.props.general.brand.mobileLogoUrl
-            }
-          />
+          <MobileHeader img={brandLogo} />
 
           {/* Carousel */}
           <Slider />
@@ -633,6 +632,7 @@ class Default extends Component {
             <MobileMarquee />
 
             {/* User Profile Block */}
+            {/*<UserProfile />*/}
             <ProfileContainer
               src={
                 process.env.PUBLIC_URL + `/assets/images/wapp/home-profile.png`
