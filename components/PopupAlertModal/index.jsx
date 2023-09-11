@@ -1,21 +1,7 @@
 import i18n from "../../../../utils/i18n";
 import React from "react";
-import { withStyles } from "@material-ui/core/styles";
-import Modal from "@material-ui/core/Dialog";
 import styled from "styled-components";
-
-const StyledModal = withStyles((theme) => ({
-  paper: {
-    borderRadius: "50px",
-    fontSize: "28px",
-    color: "#666666",
-    padding: "30px",
-    width: "500px",
-    maxWidth: "690px",
-
-    display: "block",
-  },
-}))(Modal);
+import { StyledDialog } from "@/components/Wap/components/PopupAlertModal/StyledDialog";
 
 const DialogTitle = styled.div`
   font-size: 36px;
@@ -51,13 +37,13 @@ const ButtonConfirm = styled.div`
   color: #ffffff;
 `;
 
-interface IModalButtonsProps {
-  handleClose: () => void;
-  message: string;
-  action: string;
-}
+// interface IModalButtonsProps {
+//   handleClose: () => void;
+//   message: string;
+//   action: string;
+// }
 
-const ModalButtons = ({ handleClose, message, action }: IModalButtonsProps) => {
+const ModalButtons = ({ handleClose, message, action }) => {
   if (message === "无法连接，请检查您的网络") {
     return (
       <ButtonConfirm onClick={() => window.location.reload()}>
@@ -77,23 +63,17 @@ const ModalButtons = ({ handleClose, message, action }: IModalButtonsProps) => {
   }
 };
 
-interface IModalProps {
-  isOpen: boolean;
-  handleClose: () => void;
-  title: string;
-  message: string;
-  action: string;
-}
+// interface IModalProps {
+//   isOpen: boolean;
+//   handleClose: () => void;
+//   title: string;
+//   message: string;
+//   action: string;
+// }
 
-const PopupAlertModal = ({
-  isOpen,
-  handleClose,
-  title,
-  message,
-  action,
-}: IModalProps) => {
+const PopupAlertModal = ({ isOpen, handleClose, title, message, action }) => {
   return (
-    <StyledModal onClose={handleClose} open={isOpen}>
+    <StyledDialog onClose={handleClose} open={isOpen}>
       <DialogTitle>{title}</DialogTitle>
       <DialogMessage>{message}</DialogMessage>
       <ModalButtons
@@ -101,7 +81,7 @@ const PopupAlertModal = ({
         message={message}
         action={action}
       />
-    </StyledModal>
+    </StyledDialog>
   );
 };
 

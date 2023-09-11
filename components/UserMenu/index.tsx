@@ -1,24 +1,9 @@
 import * as React from "react";
-import { withStyles } from "@material-ui/core/styles";
-import Dialog from "@material-ui/core/Dialog";
 import styled from "styled-components";
 import i18n from "@/utils/i18n";
 import config from "@/config/config";
+import { StyledDialog } from "./StyledDialog";
 
-const StyledDialog = withStyles({
-  root: {
-    "& .MuiDialog-paperWidthSm": {
-      width: "100%",
-      height: "100%",
-      maxWidth: "750px",
-      maxHeight: "100%",
-      margin: 0,
-    },
-  },
-  paper: {
-    backgroundColor: "rgba(0,0,0,0.8)",
-  },
-})(Dialog);
 const MenuContainer = styled.div`
   width: 100%;
   height: 100%;
