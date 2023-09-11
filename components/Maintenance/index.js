@@ -312,7 +312,7 @@ const Maintenance = (props) => {
 
   return (
     <MaintenanceBg image={maintenanceImageSwitcher(config.wapVersion)}>
-      <CustomContainer container justify="center" alignItems="center">
+      <CustomContainer container justifyContent="center" alignItems="center">
         {isFailed ? (
           <Local />
         ) : content ? (
