@@ -111,7 +111,7 @@ class Main extends Component {
           <Support
             alert={this.props.alert}
             navigate={this.props.navigate}
-            cs={this.handleContactCs}
+            handleContactCs={this.handleContactCs}
           />
         );
 
