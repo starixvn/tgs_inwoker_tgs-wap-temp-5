@@ -276,4 +276,4 @@ const SupportDefaultScene = ({
   );
 };
 
-export default React.memo(SupportDefaultScene);
+export default SupportDefaultScene;

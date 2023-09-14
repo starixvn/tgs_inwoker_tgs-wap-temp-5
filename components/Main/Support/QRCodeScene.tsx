@@ -94,4 +94,4 @@ const QRCodeScene = ({ brandsSupportList, handleGoBack }: Props) => {
   );
 };
 
-export default React.memo(QRCodeScene);
+export default QRCodeScene;
