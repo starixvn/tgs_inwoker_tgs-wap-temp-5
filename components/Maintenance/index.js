@@ -164,7 +164,7 @@ const Maintenance = (props) => {
   const [content, setContent] = useState("");
   const [isFailed, setFailed] = useState(false);
   useEffect(() => {
-    props.brandComm().then((e) => {
+    props.brandComm?.().then((e) => {
       if (e.IsSuccess) {
         setIMList(e.data);
       }
